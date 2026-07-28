@@ -4,6 +4,7 @@
 #include "Math/AABB3.hpp"
 #include "Core/Engine.hpp"
 #include "Core/Clock.hpp"
+#include "Math/MathUtils.hpp"
 
 static RandomNumberGenerator s_rng;
 
@@ -61,7 +62,7 @@ void ParticleEmitter::Update()
 }
 
 //----------------------------------------------------------------------------------------------
-void ParticleEmitter::Render() const
+void ParticleEmitter::Render( Camera* camera ) const
 {
     std::vector< Vertex > verts;
     AddVertsForAABB3D( verts, AABB3( -0.1f, -0.1f, -0.1f, 0.1f, 0.1f, 0.1f ) );
@@ -72,20 +73,20 @@ void ParticleEmitter::Render() const
     g_engine->m_render->DrawVertexArray( verts );
 
     std::vector< Vertex > v;
-    AddVertsForAABB3D( v, AABB3( -0.5f, -0.5f, -0.5f, 0.5f, 0.5f, 0.5f ) );
+    AddVertsForQuad3D( v, Vec3( 0.f, -0.5f, -0.5f ), Vec3( 0.f, 0.5f, -0.5f ), Vec3( 0.f, 0.5f, 0.5f ), Vec3( 0.f, -0.5f, 0.5f ) );
+    //Texture* t = g_engine->m_render->CreateOrGetTextureFromFile( "Data/Textures/PolygonParticles_Smoke_01.png" );
+    Texture* t = g_engine->m_render->CreateOrGetTextureFromFile( "Data/Textures/VFX/PolygonParticles_Sparkle.png" );
 
     for ( int i = 0; i < static_cast< int >( m_particles.size() ); ++i )
     {
         Particle const& p = m_particles[ i ];
 
-        Mat44           m;
-        m.AppendTranslation3D( p.m_position );
-        m.AppendScaleUniform3D( 0.5f );
-
+        Mat44           m = GetBillboard( BillboardType::FULL_FACING, camera->GetCameraToWorldTransform(), p.m_position );
         g_engine->m_render->BindShader( ShaderType::PBRLitStatic );
-        g_engine->m_render->SetMaterialConstants( 0.f, 0.f, 1.0f, 20.f, Rgba8::RED );
+        g_engine->m_render->SetMaterialConstants( 0.f, 0.f, 1.0f, 2.f, Rgba8::RED );
+        g_engine->m_render->SetBlendMode( BlendMode::ALPHA );
 
-        g_engine->m_render->BindTextureWithSampler( { g_defaultWhiteTexture, SamplerMode::POINT_CLAMP, ShaderResourceSlot::DIFFUSE } );
+        g_engine->m_render->BindTextureWithSampler( { t, SamplerMode::POINT_CLAMP, ShaderResourceSlot::DIFFUSE } );
         g_engine->m_render->BindTextureWithSampler( { g_defaultNormalTexture, SamplerMode::POINT_CLAMP, ShaderResourceSlot::NORMAL } );
         g_engine->m_render->BindTextureWithSampler( { g_defaultSGETexture, SamplerMode::POINT_CLAMP, ShaderResourceSlot::SPEC_GLOSS_EMIT } );
         g_engine->m_render->BindTextureWithSampler( { g_defaultAmbientOcclusionTexture, SamplerMode::POINT_CLAMP, ShaderResourceSlot::AMBIENT_OCCLUSION } );
@@ -96,7 +97,7 @@ void ParticleEmitter::Render() const
         g_engine->m_render->DrawVertexArray( v );
 
         g_engine->m_render->UnbindPBRTextures();
-
+        g_engine->m_render->SetBlendMode( BlendMode::OPAQUE );
         g_engine->m_render->SetMaterialConstants();
         g_engine->m_render->BindShader( ShaderType::Default );
     }

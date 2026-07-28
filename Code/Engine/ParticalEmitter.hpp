@@ -11,6 +11,8 @@
 //----------------------------------------------------------------------------------------------
 #include <vector>
 
+class Camera;
+
 //----------------------------------------------------------------------------------------------
 struct Particle
 {
@@ -35,7 +37,7 @@ public:
 
     void  Spawn();
     void  Update();
-    void  Render() const;
+    void  Render( Camera* camera ) const;
 
     Mat44 GetModelToWorldTransform() const;
 
