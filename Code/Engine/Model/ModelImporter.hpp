@@ -114,7 +114,7 @@ public:
 
     static void                                    InitializeStaticMesh( StaticMesh& staticMesh, aiMesh const* const* meshes, unsigned int numMeshes );
     static void                                    InitializeSkeletonMesh( Skeleton const& skeleton, SkeletonMesh& skeletonMesh, aiMesh const* const* meshes, unsigned int numMeshes );
-    static void                                    InitializeSkeleton( Skeleton& skeleton, aiMesh const* const* meshes );
+    static void                                    InitializeSkeleton( Skeleton& skeleton, aiMesh const* const* meshes, unsigned int numMeshes );
     static void                                    InitializeMaterials( std::vector< Material >& materials, aiScene const* scene );
     static void                                    TraverseNode( std::vector< Node >& nodes, aiNode const* aiNode, Mat44 const& parentTransform = Mat44() );
     static void                                    CrearModels();

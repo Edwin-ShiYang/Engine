@@ -39,7 +39,7 @@ StaticModel* ModelImporter::CreateOrGetStaticModelFromFile( std::string const& f
     Assimp::Importer importer;
     importer.SetPropertyBool( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false );
     importer.SetPropertyFloat( AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.f );
-    aiScene const* scene = importer.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals );
+    aiScene const* scene = importer.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_CalcTangentSpace | aiProcess_LimitBoneWeights | aiProcess_TransformUVCoords | aiProcess_GenSmoothNormals );
     GUARANTEE_OR_DIE( scene, Stringf( "ModelImporter::CreateOrGetModelFromFile - Failed to load file: %s", filePath.c_str() ) );
 
     StaticModel* model = new StaticModel();
@@ -64,12 +64,12 @@ SkeletonModel* ModelImporter::CreateOrGetSkeletonModelFromFile( std::string cons
     Assimp::Importer importer;
     importer.SetPropertyBool( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false );
     importer.SetPropertyFloat( AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.f );
-    aiScene const* scene = importer.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals );
+    aiScene const* scene = importer.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_CalcTangentSpace | aiProcess_LimitBoneWeights | aiProcess_TransformUVCoords | aiProcess_GenSmoothNormals );
     GUARANTEE_OR_DIE( scene, Stringf( "ModelImporter::CreateOrGetSkeletonModelFromFile - Failed to load file: %s", filePath.c_str() ) );
 
     SkeletonModel* model = new SkeletonModel();
 
-    InitializeSkeleton( model->m_skeleton, scene->mMeshes );
+    InitializeSkeleton( model->m_skeleton, scene->mMeshes, scene->mNumMeshes );
     InitializeSkeletonMesh( model->m_skeleton, model->m_skeletonMesh, scene->mMeshes, scene->mNumMeshes );
     InitializeMaterials( model->m_materials, scene );
     TraverseNode( model->m_nodes, scene->mRootNode, Mat44() );
@@ -85,7 +85,7 @@ AnimationClip* ModelImporter::CreateOrGetAnimationFromFile( std::string const& f
     animImporter.SetPropertyBool( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false );
     animImporter.SetPropertyFloat( AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.f );
 
-    aiScene const*     animScene     = animImporter.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_TransformUVCoords | aiProcess_CalcTangentSpace );
+    aiScene const*     animScene     = animImporter.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_CalcTangentSpace | aiProcess_LimitBoneWeights | aiProcess_TransformUVCoords | aiProcess_GenSmoothNormals );
     aiAnimation const* animation     = animScene->mAnimations[ 0 ];
     AnimationClip*     animationClip = new AnimationClip();
     animationClip->m_name            = animation->mName.C_Str();
@@ -253,17 +253,29 @@ void ModelImporter::InitializeSkeletonMesh( Skeleton const& skeleton, SkeletonMe
 }
 
 //-----------------------------------------------------------------------------------------------
-void ModelImporter::InitializeSkeleton( Skeleton& skeleton, aiMesh const* const* meshes )
+void ModelImporter::InitializeSkeleton( Skeleton& skeleton, aiMesh const* const* meshes, unsigned int numMeshes )
 {
-    aiMesh const* mesh = meshes[ 0 ];
-    for ( unsigned int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex )
+    for ( unsigned int meshIndex = 0; meshIndex < numMeshes; ++meshIndex )
     {
-        aiBone const* aiBone = mesh->mBones[ boneIndex ];
-        Joint         joint;
-        joint.m_name              = aiBone->mName.C_Str();
-        joint.m_inverseBindMatrix = GetMatrixFromFile( aiBone->mOffsetMatrix );
-        skeleton.m_joints.push_back( joint );
+        aiMesh const* mesh = meshes[ meshIndex ];
+
+        for ( unsigned int boneIndex = 0; boneIndex < mesh->mNumBones; ++boneIndex )
+        {
+            aiBone const* aiBone = mesh->mBones[ boneIndex ];
+
+            if ( GetBoneIndexByName( skeleton, aiBone->mName.C_Str() ) >= 0 )
+            {
+                continue;
+            }
+
+            Joint joint;
+            joint.m_name              = aiBone->mName.C_Str();
+            joint.m_inverseBindMatrix = GetMatrixFromFile( aiBone->mOffsetMatrix );
+            skeleton.m_joints.push_back( joint );
+        }
     }
+
+    GUARANTEE_OR_DIE( skeleton.m_joints.size() <= 128, "Skeleton exceeds shader joint limit" );
 }
 
 //-----------------------------------------------------------------------------------------------
