@@ -200,7 +200,7 @@ public:
     void                BindTextureWithSampler( TextureBinding const& binding );
 
     void                UnbindTexture( ShaderResourceSlot slot );
-    void                UnbindTextures();
+    void                UnbindPBRTextures();
 
     void                SetBlendMode( BlendMode blendMode );
     void                SetSamplerMode( SamplerMode samplerMode, ShaderResourceSlot slot );

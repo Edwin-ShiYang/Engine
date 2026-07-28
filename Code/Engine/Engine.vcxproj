@@ -332,6 +332,7 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ThirdParty\imGUI\imgui.cpp" />
+    <ClCompile Include="..\ThirdParty\imGUI\ImGuizmo.cpp" />
     <ClCompile Include="..\ThirdParty\imGUI\imgui_draw.cpp" />
     <ClCompile Include="..\ThirdParty\imGUI\imgui_impl_dx11.cpp" />
     <ClCompile Include="..\ThirdParty\imGUI\imgui_impl_win32.cpp" />
@@ -389,6 +390,7 @@
     <ClCompile Include="Model\StaticMesh.cpp" />
     <ClCompile Include="Model\StaticMeshSection.cpp" />
     <ClCompile Include="Network\NetworkSystem.cpp" />
+    <ClCompile Include="ParticalEmitter.cpp" />
     <ClCompile Include="Renderer\BitmapFont.cpp" />
     <ClCompile Include="Renderer\Camera.cpp" />
     <ClCompile Include="Renderer\ConstantBuffer.cpp" />
@@ -418,6 +420,7 @@
     <ClInclude Include="..\ThirdParty\fmod\fmod_dsp_effects.h" />
     <ClInclude Include="..\ThirdParty\fmod\fmod_errors.h" />
     <ClInclude Include="..\ThirdParty\fmod\fmod_output.h" />
+    <ClInclude Include="..\ThirdParty\imGUI\ImGuizmo.h" />
     <ClInclude Include="..\ThirdParty\stb\stb_image.h" />
     <ClInclude Include="..\ThirdParty\TinyXML2\tinyxml2.h" />
     <ClInclude Include="AnimationClip.hpp" />
@@ -472,6 +475,7 @@
     <ClInclude Include="Model\StaticMesh.hpp" />
     <ClInclude Include="Model\StaticMeshSection.hpp" />
     <ClInclude Include="Network\NetworkSystem.hpp" />
+    <ClInclude Include="ParticalEmitter.hpp" />
     <ClInclude Include="RenderConstants.hpp" />
     <ClInclude Include="Renderer\BitmapFont.hpp" />
     <ClInclude Include="Renderer\Camera.hpp" />

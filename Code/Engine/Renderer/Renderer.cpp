@@ -382,7 +382,7 @@ void Renderer::BeginHDRPass()
 //------------------------------------------------------------------------------------------------
 void Renderer::EndHDRPass()
 {
-    UnbindTextures();
+    UnbindPBRTextures();
     ResetSamplerModes();
 
     m_deviceContext->OMSetRenderTargets( 0, nullptr, nullptr );
@@ -1421,13 +1421,14 @@ void Renderer::UnbindTexture( ShaderResourceSlot slot )
 }
 
 //------------------------------------------------------------------------------------------------
-void Renderer::UnbindTextures()
+void Renderer::UnbindPBRTextures()
 {
-    UnbindTexture( ShaderResourceSlot ::DIFFUSE );
-    UnbindTexture( ShaderResourceSlot ::METALLIC );
-    UnbindTexture( ShaderResourceSlot ::NORMAL );
-    UnbindTexture( ShaderResourceSlot ::ROUGHNESS );
-    UnbindTexture( ShaderResourceSlot ::AMBIENT_OCCLUSION );
+    UnbindTexture( ShaderResourceSlot::DIFFUSE );
+    UnbindTexture( ShaderResourceSlot::NORMAL );
+    UnbindTexture( ShaderResourceSlot::SPEC_GLOSS_EMIT );
+    UnbindTexture( ShaderResourceSlot::AMBIENT_OCCLUSION );
+    UnbindTexture( ShaderResourceSlot::METALLIC );
+    UnbindTexture( ShaderResourceSlot::ROUGHNESS );
 }
 
 //------------------------------------------------------------------------------------------------

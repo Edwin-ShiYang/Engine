@@ -347,9 +347,9 @@ void ModelImporter::TraverseNode( std::vector< Node >& nodes, aiNode const* aiNo
     worldTransform.Append( localTransform );
 
     Node node;
-    node.m_name           = aiNode->mName.C_Str();
-    node.m_localTransform = localTransform;
-    node.m_worldTransform = worldTransform;
+    node.m_name            = aiNode->mName.C_Str();
+    node.m_localTransform  = localTransform;
+    node.m_globalTransform = worldTransform;
 
     unsigned int nodeIndex = static_cast< unsigned int >( nodes.size() );
     nodes.push_back( node );

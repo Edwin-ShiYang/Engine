@@ -16,7 +16,7 @@ void SkeletonMesh::RenderMesh( SkeletonModel const* skeletonModel, Mat44 const& 
         for ( int meshIndex = 0; meshIndex < static_cast< int >( node.m_meshIndexes.size() ); ++meshIndex )
         {
             Mat44 finalMatrix = modelToWorldTransform;
-            finalMatrix.Append( node.m_worldTransform );
+            finalMatrix.Append( node.m_globalTransform );
 
             unsigned int   meshSectionIndex = node.m_meshIndexes[ meshIndex ];
             unsigned int   materialIndex    = staticMeshSections[ meshSectionIndex ].m_materialIndex;

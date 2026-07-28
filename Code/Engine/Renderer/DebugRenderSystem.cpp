@@ -540,9 +540,9 @@ void DebugAddWorldBasis( Mat44 const& transform, float duration, DebugRenderMode
     debugObject.m_mode     = mode;
     debugObject.m_duration = duration;
 
-    AddVertsForArrow3D( debugObject.m_verts, Vec3::ZERO, Vec3::WORLD_FORWARD * 2.0f, 0.2f, Rgba8::RED );
-    AddVertsForArrow3D( debugObject.m_verts, Vec3::ZERO, Vec3::WORLD_LEFT * 2.0f, 0.2f, Rgba8::GREEN );
-    AddVertsForArrow3D( debugObject.m_verts, Vec3::ZERO, Vec3::WORLD_UP * 2.0f, 0.2f, Rgba8::BLUE );
+    AddVertsForArrow3D( debugObject.m_verts, Vec3::ZERO, Vec3::WORLD_FORWARD * 2.0f, 0.1f, Rgba8::CATPPUCCIN_RED );
+    AddVertsForArrow3D( debugObject.m_verts, Vec3::ZERO, Vec3::WORLD_LEFT * 2.0f, 0.1f, Rgba8::CATPPUCCIN_GREEN );
+    AddVertsForArrow3D( debugObject.m_verts, Vec3::ZERO, Vec3::WORLD_UP * 2.0f, 0.1f, Rgba8::CATPPUCCIN_BLUE );
     TransformVertexArray3D( debugObject.m_verts, transform );
 
     s_debugObjects.push_back( debugObject );

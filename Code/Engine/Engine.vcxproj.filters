@@ -200,6 +200,9 @@
     <Filter Include="Core\Animation">
       <UniqueIdentifier>{032a6c4e-2a78-4990-aca6-1bbc61bc2249}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Renderer\ParticalEmitter">
+      <UniqueIdentifier>{6d986f5f-f8af-4ad9-97ac-6bb917c73ff9}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer\Renderer.cpp">
@@ -432,6 +435,12 @@
     </ClCompile>
     <ClCompile Include="AnimationController.cpp">
       <Filter>Core\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticalEmitter.cpp">
+      <Filter>Renderer\ParticalEmitter</Filter>
+    </ClCompile>
+    <ClCompile Include="..\ThirdParty\imGUI\ImGuizmo.cpp">
+      <Filter>Renderer\ImGUISystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -686,6 +695,12 @@
     </ClInclude>
     <ClInclude Include="VertexLayout.hpp.hpp">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticalEmitter.hpp">
+      <Filter>Renderer\ParticalEmitter</Filter>
+    </ClInclude>
+    <ClInclude Include="..\ThirdParty\imGUI\ImGuizmo.h">
+      <Filter>Renderer\ImGUISystem</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

@@ -44,7 +44,7 @@ struct Node
     std::vector< unsigned int > m_childrenIndices;
     std::vector< unsigned int > m_meshIndexes;
     Mat44                       m_localTransform;
-    Mat44                       m_worldTransform;
+    Mat44                       m_globalTransform;
     std::string                 m_name;
 };
 
@@ -53,9 +53,8 @@ struct Joint
 {
     std::string m_name;
     Mat44       m_inverseBindMatrix;
-    Mat44       m_worldTransform;
+    Mat44       m_globalTransform;
     Mat44       m_localTransform;
-    Mat44       m_skinMatrix;
 };
 
 //-----------------------------------------------------------------------------------------------
