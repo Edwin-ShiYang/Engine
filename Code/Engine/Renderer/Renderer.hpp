@@ -206,7 +206,8 @@ enum class ResourceSlot : int
 //----------------------------------------------------------------------------------------------
 enum class ShaderType : int
 {
-    PBRLit = 0,
+    PBRLitStatic = 0,
+    PBRLitSkinned,
     ShadowMap,
     COUNT
 };
@@ -254,7 +255,8 @@ struct RenderConfig
     std::string m_horizontalBlurPass;
     std::string m_verticalBlurPass;
     std::string m_toneMappingPass;
-    std::string m_pbrLit;
+    std::string m_pbrLitStatic;
+    std::string m_pbrLitSkinned;
     std::string m_shadowMap;
     std::string m_skybox;
     std::string m_equirectangularToCubemap;
@@ -433,7 +435,8 @@ public:
     Shader*                                                                      m_horizontalBlur           = nullptr;
     Shader*                                                                      m_verticalBlur             = nullptr;
     Shader*                                                                      m_defaultShader            = nullptr;
-    Shader*                                                                      m_pbrLitShader             = nullptr;
+    Shader*                                                                      m_pbrLitStatic             = nullptr;
+    Shader*                                                                      m_pbrLitSkinned            = nullptr;
     Shader*                                                                      m_shadowMap                = nullptr;
     Shader*                                                                      m_skybox                   = nullptr;
     Shader*                                                                      m_equirectangularToCubemap = nullptr;

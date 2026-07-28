@@ -1145,7 +1145,8 @@ VertexDescriptor Renderer::GetVertexDescriptor( VertexType vertexType )
 void Renderer::CreateDefaultShaders()
 {
     m_defaultShader            = CreateShaderAndComplie( "Data/Shaders/Default", VertexType::VERTEX_PCUTBN );
-    m_pbrLitShader             = CreateShaderAndComplie( m_config.m_pbrLit.c_str(), VertexType::VERTEX_SKINNED );
+    m_pbrLitStatic             = CreateShaderAndComplie( m_config.m_pbrLitStatic.c_str(), VertexType::VERTEX_PCUTBN );
+    m_pbrLitSkinned            = CreateShaderAndComplie( m_config.m_pbrLitSkinned.c_str(), VertexType::VERTEX_SKINNED );
     m_brightPass               = CreateShaderAndComplie( m_config.m_brightPass.c_str(), VertexType::VERTEX_PCUTBN );
     m_horizontalBlur           = CreateShaderAndComplie( m_config.m_horizontalBlurPass.c_str(), VertexType::VERTEX_PCUTBN );
     m_verticalBlur             = CreateShaderAndComplie( m_config.m_verticalBlurPass.c_str(), VertexType::VERTEX_PCUTBN );
@@ -1337,8 +1338,12 @@ void Renderer::BindShader( ShaderType type )
     Shader* shader = nullptr;
     switch ( type )
     {
-        case ShaderType::PBRLit:
-            shader = m_pbrLitShader;
+        case ShaderType::PBRLitStatic:
+            shader = m_pbrLitStatic;
+            break;
+
+        case ShaderType::PBRLitSkinned:
+            shader = m_pbrLitSkinned;
             break;
 
         case ShaderType::ShadowMap:
