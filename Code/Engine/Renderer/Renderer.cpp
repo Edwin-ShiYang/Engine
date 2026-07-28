@@ -41,6 +41,15 @@
 #include "CubemapTexture.hpp"
 #include "../RenderConstants.hpp"
 
+//-----------------------------------------------------------------------------------------------
+Texture const* g_defaultWhiteTexture            = nullptr;
+Texture const* g_defaultNormalTexture           = nullptr;
+Texture const* g_defaultDiffuseTexture          = nullptr;
+Texture const* g_defaultSGETexture              = nullptr;
+Texture const* g_defaultMetallicTexture         = nullptr;
+Texture const* g_defaultRoughnessTexture        = nullptr;
+Texture const* g_defaultAmbientOcclusionTexture = nullptr;
+
 //----------------------------------------------------------------------------------------------
 struct TextureDescriptionConfig
 {
@@ -312,7 +321,7 @@ void Renderer::SetRenderTarget( ID3D11RenderTargetView* rtv, ID3D11DepthStencilV
 }
 
 //----------------------------------------------------------------------------------------------
-void Renderer::SetMaterialConstants( float metallic /*= 0.f*/, float roughness /*= 0.5f*/, float ambientOcclusion /*= 1.0f*/, float emissiveIntensity /*= 0.f*/, Rgba8 emissiveColor /*= Rgba8::WHITE */ ) const
+void Renderer::SetMaterialConstants( float metallic /*= 0.f*/, float roughness /*= 0.5f*/, float ambientOcclusion /*= 1.0f*/, float emissiveIntensity /*= 0.f*/, Rgba8 emissiveColor /*= Rgba8::WHITE */ )
 {
     MaterialConstants materialConstants;
 
@@ -325,30 +334,30 @@ void Renderer::SetMaterialConstants( float metallic /*= 0.f*/, float roughness /
 
     materialConstants.c_emissiveIntensity = emissiveIntensity;
 
-    g_engine->m_render->CopyCPUToGPU( &materialConstants, sizeof( MaterialConstants ), m_matCBO );
-    g_engine->m_render->BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::Material ), m_matCBO );
+    CopyCPUToGPU( &materialConstants, sizeof( MaterialConstants ), m_matCBO );
+    BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::Material ), m_matCBO );
 }
 
 //----------------------------------------------------------------------------------------------
-void Renderer::SetPostProcessConstants() const
+void Renderer::SetPostProcessConstants()
 {
     PostProcessConstants postProcessConstants;
     postProcessConstants.c_width  = static_cast< float >( g_engine->m_window->GetClientDimensions().x );
     postProcessConstants.c_height = static_cast< float >( g_engine->m_window->GetClientDimensions().y );
-    g_engine->m_render->CopyCPUToGPU( &postProcessConstants, sizeof( PostProcessConstants ), m_postProcessCBO );
-    g_engine->m_render->BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::PostProcess ), m_postProcessCBO );
+    CopyCPUToGPU( &postProcessConstants, sizeof( PostProcessConstants ), m_postProcessCBO );
+    BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::PostProcess ), m_postProcessCBO );
 }
 
 //----------------------------------------------------------------------------------------------
-void Renderer::SetSkinConstant( std::vector< Mat44 > const& skinMatrices ) const
+void Renderer::SetSkinConstant( std::vector< Mat44 > const& skinMatrices )
 {
     SkinConstants skinConstants;
     for ( int i = 0; i < static_cast< int >( skinMatrices.size() ); ++i )
     {
         skinConstants.c_skinMatrices[ i ] = skinMatrices[ i ];
     }
-    g_engine->m_render->CopyCPUToGPU( &skinConstants, sizeof( SkinConstants ), m_skinCBO );
-    g_engine->m_render->BindConstantBuffer( 7, m_skinCBO );
+    CopyCPUToGPU( &skinConstants, sizeof( SkinConstants ), m_skinCBO );
+    BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::Skin ), m_skinCBO );
 }
 
 //------------------------------------------------------------------------------------------------
@@ -357,17 +366,17 @@ void Renderer::BeginHDRPass()
     ClearRenderTarget( m_hdrRenderTexture->m_renderTargetView, m_depthStencilDSV, Rgba8( 0, 0, 0 ) );
     SetRenderTarget( m_hdrRenderTexture->m_renderTargetView, m_depthStencilDSV );
 
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::SHADOWMAP );
-    BindTexture( m_shadowMapTexture, ResourceSlot::SHADOWMAP );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::SHADOWMAP );
+    BindTexture( m_shadowMapTexture, ShaderResourceSlot ::SHADOWMAP );
 
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::IRRADIANCE );
-    BindTexture( m_irradianceTexture, ResourceSlot::IRRADIANCE );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::IRRADIANCE );
+    BindTexture( m_irradianceTexture, ShaderResourceSlot ::IRRADIANCE );
 
-    BindTexture( m_prefilteredTexture, ResourceSlot::PREFILTERED );
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::PREFILTERED );
+    BindTexture( m_prefilteredTexture, ShaderResourceSlot ::PREFILTERED );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::PREFILTERED );
 
-    BindTexture( m_brdfLUTTexture, ResourceSlot::BRDF_LUT );
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::BRDF_LUT );
+    BindTexture( m_brdfLUTTexture, ShaderResourceSlot ::BRDF_LUT );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::BRDF_LUT );
 }
 
 //------------------------------------------------------------------------------------------------
@@ -386,13 +395,15 @@ void Renderer::BeginBrightPass()
     ClearRenderTarget( m_brightPassTexture->m_renderTargetView, nullptr );
 
     BindShader( m_brightPass );
-    BindTexture( m_hdrRenderTexture, ResourceSlot::HDR_SCENE );
+
+    BindTexture( m_hdrRenderTexture, ShaderResourceSlot ::HDR_SCENE );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::HDR_SCENE );
 }
 
 //----------------------------------------------------------------------------------------------
 void Renderer::EndBrightPass()
 {
-    UnbindTexture( ResourceSlot::HDR_SCENE );
+    UnbindTexture( ShaderResourceSlot ::HDR_SCENE );
     m_deviceContext->OMSetRenderTargets( 0, nullptr, nullptr );
 }
 
@@ -403,17 +414,17 @@ void Renderer::BeginHorizontalBlurPass()
     ClearRenderTarget( m_horizontalBlurTexture->m_renderTargetView, nullptr );
 
     SetDepthMode( DepthMode::DISABLED );
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::BRIGHT_PASS );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::BRIGHT_PASS );
     SetPostProcessConstants();
 
     BindShader( m_horizontalBlur );
-    BindTexture( m_brightPassTexture, ResourceSlot::BRIGHT_PASS );
+    BindTexture( m_brightPassTexture, ShaderResourceSlot ::BRIGHT_PASS );
 }
 
 //----------------------------------------------------------------------------------------------
 void Renderer::EndHorizontalBlurPass()
 {
-    UnbindTexture( ResourceSlot::BRIGHT_PASS );
+    UnbindTexture( ShaderResourceSlot ::BRIGHT_PASS );
     m_deviceContext->OMSetRenderTargets( 0, nullptr, nullptr );
 }
 
@@ -424,17 +435,17 @@ void Renderer::BeginVerticalBlurPass()
     ClearRenderTarget( m_verticalBlurTexture->m_renderTargetView, nullptr );
 
     SetDepthMode( DepthMode::DISABLED );
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::HORIZONTAL_BLUR );
     SetPostProcessConstants();
 
     BindShader( m_verticalBlur );
-    BindTexture( m_horizontalBlurTexture, ResourceSlot::HORIZONTAL_BLUR );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::HORIZONTAL_BLUR );
+    BindTexture( m_horizontalBlurTexture, ShaderResourceSlot ::HORIZONTAL_BLUR );
 }
 
 //----------------------------------------------------------------------------------------------
 void Renderer::EndVerticalBlurPass()
 {
-    UnbindTexture( ResourceSlot::HORIZONTAL_BLUR );
+    UnbindTexture( ShaderResourceSlot ::HORIZONTAL_BLUR );
     m_deviceContext->OMSetRenderTargets( 0, nullptr, nullptr );
 }
 
@@ -446,11 +457,11 @@ void Renderer::BeginToneMappingPass()
 
     SetDepthMode( DepthMode::DISABLED );
 
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::HDR_SCENE );
-    BindTexture( m_hdrRenderTexture, ResourceSlot::HDR_SCENE );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::HDR_SCENE );
+    BindTexture( m_hdrRenderTexture, ShaderResourceSlot ::HDR_SCENE );
 
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::VERTICAL_BLUR );
-    BindTexture( m_verticalBlurTexture, ResourceSlot::VERTICAL_BLUR );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::VERTICAL_BLUR );
+    BindTexture( m_verticalBlurTexture, ShaderResourceSlot ::VERTICAL_BLUR );
 
     BindShader( m_toneMapping );
 }
@@ -458,8 +469,8 @@ void Renderer::BeginToneMappingPass()
 //----------------------------------------------------------------------------------------------
 void Renderer::EndToneMappingPass()
 {
-    g_engine->m_render->UnbindTexture( ResourceSlot::HDR_SCENE );
-    g_engine->m_render->UnbindTexture( ResourceSlot::VERTICAL_BLUR );
+    UnbindTexture( ShaderResourceSlot ::HDR_SCENE );
+    UnbindTexture( ShaderResourceSlot ::VERTICAL_BLUR );
 }
 
 //----------------------------------------------------------------------------------------------
@@ -589,7 +600,7 @@ void Renderer::SetBlendMode( BlendMode blendMode )
 }
 
 //------------------------------------------------------------------------------------------------
-void Renderer::SetSamplerMode( SamplerMode samplerMode, ResourceSlot slot )
+void Renderer::SetSamplerMode( SamplerMode samplerMode, ShaderResourceSlot slot )
 {
     m_desiredSamplerModes[ static_cast< int >( slot ) ] = samplerMode;
 }
@@ -630,9 +641,9 @@ void Renderer::SetStatesIfChanged()
     }
 
     // Sampler State
-    for ( int slot = 0; slot < static_cast< int >( ResourceSlot::COUNT ); ++slot )
+    for ( int slot = 0; slot < static_cast< int >( ShaderResourceSlot ::COUNT ); ++slot )
     {
-        ID3D11SamplerState* desiredSamplerState = ( slot == static_cast< int >( ResourceSlot::SHADOWMAP ) ) ? m_shadowComparisonSampler : m_samplerStates[ static_cast< int >( m_desiredSamplerModes[ slot ] ) ];
+        ID3D11SamplerState* desiredSamplerState = ( slot == static_cast< int >( ShaderResourceSlot ::SHADOWMAP ) ) ? m_shadowComparisonSampler : m_samplerStates[ static_cast< int >( m_desiredSamplerModes[ slot ] ) ];
         if ( m_currentSamplerStates[ slot ] != desiredSamplerState )
         {
             m_currentSamplerStates[ slot ] = desiredSamplerState;
@@ -1052,14 +1063,14 @@ void Renderer::CreateDefaultTextures()
 		0,   0, 0,   255,  255, 0, 255,  255, 0,   0,  0,    255,  255, 0, 255, 255
 	};
     // clang-format on
+    g_defaultNormalTexture = CreateTextureFromImage( Image( IntVec2( 4, 4 ), Rgba8( 127, 127, 255, 255 ) ) );
+    g_defaultWhiteTexture  = CreateTextureFromImage( Image( IntVec2( 2, 2 ), Rgba8::WHITE ) );
 
-    m_defaultDiffuseTexture          = CreateTextureFromImage( Image( IntVec2( 4, 4 ), defaultDiffuseTextureData, 4 ) );
-    m_defaultNormalTexture           = CreateTextureFromImage( Image( IntVec2( 4, 4 ), Rgba8( 127, 127, 255, 255 ) ) );
-    m_defaultSGETexture              = CreateTextureFromImage( Image( IntVec2( 4, 4 ), Rgba8( 127, 127, 0, 255 ) ) );
-    m_defaultWhiteTexture            = CreateTextureFromImage( Image( IntVec2( 2, 2 ), Rgba8::WHITE ) );
-    m_defaultMetallicTexture         = m_defaultWhiteTexture;
-    m_defaultRoughnessTexture        = m_defaultWhiteTexture;
-    m_defaultAmbientOcclusionTexture = m_defaultWhiteTexture;
+    g_defaultDiffuseTexture          = CreateTextureFromImage( Image( IntVec2( 4, 4 ), defaultDiffuseTextureData, 4 ) );
+    g_defaultSGETexture              = CreateTextureFromImage( Image( IntVec2( 4, 4 ), Rgba8( 127, 127, 0, 255 ) ) );
+    g_defaultMetallicTexture         = g_defaultWhiteTexture;
+    g_defaultRoughnessTexture        = g_defaultWhiteTexture;
+    g_defaultAmbientOcclusionTexture = g_defaultWhiteTexture;
 
     m_hdrRenderTexture      = CreateRenderTexture();
     m_brightPassTexture     = CreateRenderTexture();
@@ -1209,8 +1220,8 @@ void Renderer::DrawFullQuad()
 void Renderer::DrawSkyCube( Camera* camera, float scale )
 {
     BindShader( m_skybox );
-    BindTexture( m_environmentTexture, ResourceSlot::ENVIRONMENTCUBEMAP );
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::ENVIRONMENTCUBEMAP );
+    BindTexture( m_environmentTexture, ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
     SetDepthMode( DepthMode::READ_ONLY_LESS_EQUAL );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_NONE );
 
@@ -1383,20 +1394,27 @@ void Renderer::BindTexture( Texture const* texture )
 {
     if ( !texture )
     {
-        texture = m_defaultWhiteTexture;
+        texture = g_defaultWhiteTexture;
     }
 
     m_deviceContext->PSSetShaderResources( 0, 1, &texture->m_shaderResourceView );
 }
 
 //------------------------------------------------------------------------------------------------
-void Renderer::BindTexture( TextureBase const* texture, ResourceSlot slot )
+void Renderer::BindTexture( TextureBase const* texture, ShaderResourceSlot slot )
 {
     m_deviceContext->PSSetShaderResources( static_cast< unsigned int >( slot ), 1, &texture->m_shaderResourceView );
 }
 
 //------------------------------------------------------------------------------------------------
-void Renderer::UnbindTexture( ResourceSlot slot )
+void Renderer::BindTextureWithSampler( TextureBinding const& binding )
+{
+    BindTexture( binding.m_texture, binding.m_slot );
+    SetSamplerMode( binding.m_samplerMode, binding.m_slot );
+}
+
+//------------------------------------------------------------------------------------------------
+void Renderer::UnbindTexture( ShaderResourceSlot slot )
 {
     ID3D11ShaderResourceView* nullShaderResourceView = nullptr;
     m_deviceContext->PSSetShaderResources( static_cast< unsigned int >( slot ), 1, &nullShaderResourceView );
@@ -1405,11 +1423,11 @@ void Renderer::UnbindTexture( ResourceSlot slot )
 //------------------------------------------------------------------------------------------------
 void Renderer::UnbindTextures()
 {
-    UnbindTexture( ResourceSlot::DIFFUSE );
-    UnbindTexture( ResourceSlot::METALLIC );
-    UnbindTexture( ResourceSlot::NORMAL );
-    UnbindTexture( ResourceSlot::ROUGHNESS );
-    UnbindTexture( ResourceSlot::AMBIENT_OCCLUSION );
+    UnbindTexture( ShaderResourceSlot ::DIFFUSE );
+    UnbindTexture( ShaderResourceSlot ::METALLIC );
+    UnbindTexture( ShaderResourceSlot ::NORMAL );
+    UnbindTexture( ShaderResourceSlot ::ROUGHNESS );
+    UnbindTexture( ShaderResourceSlot ::AMBIENT_OCCLUSION );
 }
 
 //------------------------------------------------------------------------------------------------
@@ -1429,7 +1447,7 @@ void Renderer::DestroyTextures()
 
     m_loadedTextures.clear();
     m_loadedTexturesByName.clear();
-    m_defaultWhiteTexture = nullptr;
+    g_defaultWhiteTexture = nullptr;
 }
 
 //------------------------------------------------------------------------------------------------
@@ -1849,9 +1867,9 @@ void Renderer::SetDepthMode( DepthMode depthMode )
 //------------------------------------------------------------------------------------------------
 void Renderer::ResetSamplerModes()
 {
-    for ( int slot = 0; slot < static_cast< int >( ResourceSlot::COUNT ); ++slot )
+    for ( int slot = 0; slot < static_cast< int >( ShaderResourceSlot ::COUNT ); ++slot )
     {
-        SetSamplerMode( SamplerMode::POINT_CLAMP, static_cast< ResourceSlot >( slot ) );
+        SetSamplerMode( SamplerMode::POINT_CLAMP, static_cast< ShaderResourceSlot >( slot ) );
     }
 }
 
@@ -1923,9 +1941,9 @@ RenderTexture* Renderer::CreateRenderTexture( unsigned int width, unsigned int h
 void Renderer::ConvertEquirectangularToCubemap( Texture* texture )
 {
     BindShader( m_equirectangularToCubemap );
-    BindTexture( texture, ResourceSlot::ENVIRONMENTCUBEMAP );
+    BindTexture( texture, ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
 
-    SetSamplerMode( SamplerMode::BILINEAR_WRAP, ResourceSlot::ENVIRONMENTCUBEMAP );
+    SetSamplerMode( SamplerMode::BILINEAR_WRAP, ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
     SetDepthMode( DepthMode::DISABLED );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_NONE );
 
@@ -1949,7 +1967,7 @@ void Renderer::ConvertEquirectangularToCubemap( Texture* texture )
     m_deviceContext->OMSetRenderTargets( 0, nullptr, nullptr );
     m_deviceContext->GenerateMips( m_environmentTexture->m_shaderResourceView );
 
-    UnbindTexture( ResourceSlot::ENVIRONMENTCUBEMAP );
+    UnbindTexture( ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_BACK );
     SetDepthMode( DepthMode::READ_WRITE_LESS_EQUAL );
     BindShader( ShaderType::Default );
@@ -1961,10 +1979,10 @@ void Renderer::ConvertEquirectangularToCubemap( Texture* texture )
 //------------------------------------------------------------------------------------------------
 void Renderer::GenerateIrradianceCubemap()
 {
-    UnbindTexture( ResourceSlot::IRRADIANCE );
+    UnbindTexture( ShaderResourceSlot ::IRRADIANCE );
     BindShader( m_irradianceConvolution );
-    BindTexture( m_environmentTexture, ResourceSlot::ENVIRONMENTCUBEMAP );
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::ENVIRONMENTCUBEMAP );
+    BindTexture( m_environmentTexture, ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
     SetDepthMode( DepthMode::DISABLED );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_NONE );
     SetModelConstants();
@@ -1989,7 +2007,7 @@ void Renderer::GenerateIrradianceCubemap()
 
     m_deviceContext->OMSetRenderTargets( 0, nullptr, nullptr );
 
-    UnbindTexture( ResourceSlot::ENVIRONMENTCUBEMAP );
+    UnbindTexture( ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_BACK );
     SetDepthMode( DepthMode::READ_WRITE_LESS_EQUAL );
     BindShader( ShaderType::Default );
@@ -2009,7 +2027,7 @@ void Renderer::BeginShadowPass()
     viewport.MinDepth       = 0.f;
     viewport.MaxDepth       = 1.f;
 
-    UnbindTexture( ResourceSlot::SHADOWMAP );
+    UnbindTexture( ShaderResourceSlot ::SHADOWMAP );
     m_deviceContext->RSSetViewports( 1, &viewport );
     m_deviceContext->OMSetRenderTargets( 0, nullptr, m_shadowMapTexture->m_depthStencilView );
 
@@ -2027,11 +2045,11 @@ void Renderer::EndShadowPass()
 //------------------------------------------------------------------------------------------------
 void Renderer::GeneratePrefilteredCubemap()
 {
-    UnbindTexture( ResourceSlot::PREFILTERED );
+    UnbindTexture( ShaderResourceSlot ::PREFILTERED );
 
     BindShader( m_prefilterEnvironment );
-    BindTexture( m_environmentTexture, ResourceSlot::ENVIRONMENTCUBEMAP );
-    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ResourceSlot::ENVIRONMENTCUBEMAP );
+    BindTexture( m_environmentTexture, ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
+    SetSamplerMode( SamplerMode::BILINEAR_CLAMP, ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
     SetDepthMode( DepthMode::DISABLED );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_NONE );
     SetModelConstants();
@@ -2084,7 +2102,7 @@ void Renderer::GeneratePrefilteredCubemap()
 
     m_deviceContext->OMSetRenderTargets( 0, nullptr, nullptr );
 
-    UnbindTexture( ResourceSlot::ENVIRONMENTCUBEMAP );
+    UnbindTexture( ShaderResourceSlot ::ENVIRONMENTCUBEMAP );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_BACK );
     SetDepthMode( DepthMode::READ_WRITE_LESS_EQUAL );
     BindShader( ShaderType::Default );
@@ -2096,7 +2114,7 @@ void Renderer::GeneratePrefilteredCubemap()
 //------------------------------------------------------------------------------------------------
 void Renderer::GenerateBRDFLUT()
 {
-    UnbindTexture( ResourceSlot::BRDF_LUT );
+    UnbindTexture( ShaderResourceSlot ::BRDF_LUT );
 
     BindShader( m_brdfIntegration );
     SetBlendMode( BlendMode::OPAQUE );

@@ -28,22 +28,22 @@ void StaticMesh::Render( StaticModel const* staticModel, Mat44 const& modelToWor
             VertexBuffer*  vertexBuffer = staticMeshSections[ meshSectionIndex ].m_vertexBuffer;
             IndexBuffer*   indexbuffer  = staticMeshSections[ meshSectionIndex ].m_indexBuffer;
 
-            g_engine->m_render->BindTexture( diffuseTexture, ResourceSlot::DIFFUSE );
-            g_engine->m_render->BindTexture( normalTexture, ResourceSlot::NORMAL );
-            g_engine->m_render->BindTexture( g_engine->m_render->m_defaultMetallicTexture, ResourceSlot::METALLIC );
-            g_engine->m_render->BindTexture( g_engine->m_render->m_defaultRoughnessTexture, ResourceSlot::ROUGHNESS );
-            g_engine->m_render->BindTexture( g_engine->m_render->m_defaultAmbientOcclusionTexture, ResourceSlot::AMBIENT_OCCLUSION );
-            g_engine->m_render->BindTexture( specGlossEmitTexture, ResourceSlot::SPEC_GLOSS_EMIT );
+            g_engine->m_render->BindTexture( diffuseTexture, ShaderResourceSlot ::DIFFUSE );
+            g_engine->m_render->BindTexture( normalTexture, ShaderResourceSlot ::NORMAL );
+            g_engine->m_render->BindTexture( g_defaultMetallicTexture, ShaderResourceSlot ::METALLIC );
+            g_engine->m_render->BindTexture( g_defaultRoughnessTexture, ShaderResourceSlot ::ROUGHNESS );
+            g_engine->m_render->BindTexture( g_defaultAmbientOcclusionTexture, ShaderResourceSlot ::AMBIENT_OCCLUSION );
+            g_engine->m_render->BindTexture( specGlossEmitTexture, ShaderResourceSlot ::SPEC_GLOSS_EMIT );
 
             g_engine->m_render->SetModelConstants( finalMatrix );
             g_engine->m_render->DrawIndexedVertexBuffer( vertexBuffer, indexbuffer, static_cast< unsigned int >( staticMeshSections[ meshSectionIndex ].m_indices.size() ) );
 
-            g_engine->m_render->UnbindTexture( ResourceSlot::DIFFUSE );
-            g_engine->m_render->UnbindTexture( ResourceSlot::NORMAL );
-            g_engine->m_render->UnbindTexture( ResourceSlot::METALLIC );
-            g_engine->m_render->UnbindTexture( ResourceSlot::ROUGHNESS );
-            g_engine->m_render->UnbindTexture( ResourceSlot::AMBIENT_OCCLUSION );
-            g_engine->m_render->UnbindTexture( ResourceSlot::SPEC_GLOSS_EMIT );
+            g_engine->m_render->UnbindTexture( ShaderResourceSlot ::DIFFUSE );
+            g_engine->m_render->UnbindTexture( ShaderResourceSlot ::NORMAL );
+            g_engine->m_render->UnbindTexture( ShaderResourceSlot ::METALLIC );
+            g_engine->m_render->UnbindTexture( ShaderResourceSlot ::ROUGHNESS );
+            g_engine->m_render->UnbindTexture( ShaderResourceSlot ::AMBIENT_OCCLUSION );
+            g_engine->m_render->UnbindTexture( ShaderResourceSlot ::SPEC_GLOSS_EMIT );
         }
     }
 }

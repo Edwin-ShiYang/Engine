@@ -55,6 +55,15 @@ class CubemapTexture;
 #undef OPAQUE
 #endif
 
+//-----------------------------------------------------------------------------------------------
+extern Texture const* g_defaultWhiteTexture;
+extern Texture const* g_defaultNormalTexture;
+extern Texture const* g_defaultDiffuseTexture;
+extern Texture const* g_defaultSGETexture;
+extern Texture const* g_defaultMetallicTexture;
+extern Texture const* g_defaultRoughnessTexture;
+extern Texture const* g_defaultAmbientOcclusionTexture;
+
 //----------------------------------------------------------------------------------------------
 enum class BlendMode
 {
@@ -94,7 +103,7 @@ enum class SamplerMode
 };
 
 //----------------------------------------------------------------------------------------------
-enum class ResourceSlot : int
+enum class ShaderResourceSlot : int
 {
     DIFFUSE = 0,
     NORMAL,
@@ -122,6 +131,14 @@ enum class ShaderType : int
     ShadowMap,
     Default,
     COUNT
+};
+
+//----------------------------------------------------------------------------------------------
+struct TextureBinding
+{
+    TextureBase const* m_texture     = nullptr;
+    SamplerMode        m_samplerMode = SamplerMode::POINT_CLAMP;
+    ShaderResourceSlot m_slot        = ShaderResourceSlot::DIFFUSE;
 };
 
 //----------------------------------------------------------------------------------------------
@@ -162,9 +179,9 @@ public:
     void                EndCamera( Camera const& camera );
 
     void                SetRenderTarget( ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv = nullptr );
-    void                SetMaterialConstants( float metallic = 0.f, float roughness = 0.5f, float ambientOcclusion = 1.0f, float emissiveIntensity = 0.f, Rgba8 emissiveColor = Rgba8::WHITE ) const;
-    void                SetPostProcessConstants() const;
-    void                SetSkinConstant( std::vector< Mat44 > const& skinMatrices ) const;
+    void                SetMaterialConstants( float metallic = 0.f, float roughness = 0.5f, float ambientOcclusion = 1.0f, float emissiveIntensity = 0.f, Rgba8 emissiveColor = Rgba8::WHITE );
+    void                SetPostProcessConstants();
+    void                SetSkinConstant( std::vector< Mat44 > const& skinMatrices );
 
     void                ClearScreen( Rgba8 const& clearColor );
     void                ClearRenderTarget( ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv = nullptr, Rgba8 const& clearColor = Rgba8::BLACK );
@@ -178,12 +195,15 @@ public:
     void                BindShader( ShaderType type );
 
     void                BindTexture( Texture const* texture );
-    void                BindTexture( TextureBase const* texture, ResourceSlot slot );
-    void                UnbindTexture( ResourceSlot slot );
+    void                BindTexture( TextureBase const* texture, ShaderResourceSlot slot );
+
+    void                BindTextureWithSampler( TextureBinding const& binding );
+
+    void                UnbindTexture( ShaderResourceSlot slot );
     void                UnbindTextures();
 
     void                SetBlendMode( BlendMode blendMode );
-    void                SetSamplerMode( SamplerMode samplerMode, ResourceSlot slot );
+    void                SetSamplerMode( SamplerMode samplerMode, ShaderResourceSlot slot );
     void                SetRasterizerMode( RasterizerMode rasterizerMode );
     void                SetDepthMode( DepthMode depthMode );
     void                ResetSamplerModes();
@@ -300,83 +320,76 @@ private:
     void             InitializeCube();
 
 public:
-    RenderConfig                                                                 m_config;
+    RenderConfig                                                                        m_config;
 
-    std::vector< Texture* >                                                      m_loadedTextures;
-    std::map< std::string, Texture* >                                            m_loadedTexturesByName;
-    std::map< std::string, BitmapFont* >                                         m_loadedFontsByName;
+    std::vector< Texture* >                                                             m_loadedTextures;
+    std::map< std::string, Texture* >                                                   m_loadedTexturesByName;
+    std::map< std::string, BitmapFont* >                                                m_loadedFontsByName;
 
-    Shader*                                                                      m_toneMapping              = nullptr;
-    Shader*                                                                      m_brightPass               = nullptr;
-    Shader*                                                                      m_horizontalBlur           = nullptr;
-    Shader*                                                                      m_verticalBlur             = nullptr;
-    Shader*                                                                      m_defaultShader            = nullptr;
-    Shader*                                                                      m_pbrLitStatic             = nullptr;
-    Shader*                                                                      m_pbrLitSkinned            = nullptr;
-    Shader*                                                                      m_shadowMap                = nullptr;
-    Shader*                                                                      m_skybox                   = nullptr;
-    Shader*                                                                      m_equirectangularToCubemap = nullptr;
-    Shader*                                                                      m_irradianceConvolution    = nullptr;
-    Shader*                                                                      m_prefilterEnvironment     = nullptr;
-    Shader*                                                                      m_brdfIntegration          = nullptr;
+    Shader*                                                                             m_toneMapping              = nullptr;
+    Shader*                                                                             m_brightPass               = nullptr;
+    Shader*                                                                             m_horizontalBlur           = nullptr;
+    Shader*                                                                             m_verticalBlur             = nullptr;
+    Shader*                                                                             m_defaultShader            = nullptr;
+    Shader*                                                                             m_pbrLitStatic             = nullptr;
+    Shader*                                                                             m_pbrLitSkinned            = nullptr;
+    Shader*                                                                             m_shadowMap                = nullptr;
+    Shader*                                                                             m_skybox                   = nullptr;
+    Shader*                                                                             m_equirectangularToCubemap = nullptr;
+    Shader*                                                                             m_irradianceConvolution    = nullptr;
+    Shader*                                                                             m_prefilterEnvironment     = nullptr;
+    Shader*                                                                             m_brdfIntegration          = nullptr;
 
-    Texture const*                                                               m_defaultWhiteTexture            = nullptr;
-    Texture const*                                                               m_defaultDiffuseTexture          = nullptr;
-    Texture const*                                                               m_defaultNormalTexture           = nullptr;
-    Texture const*                                                               m_defaultSGETexture              = nullptr;
-    Texture const*                                                               m_defaultMetallicTexture         = nullptr;
-    Texture const*                                                               m_defaultRoughnessTexture        = nullptr;
-    Texture const*                                                               m_defaultAmbientOcclusionTexture = nullptr;
-    Texture*                                                                     m_hdrTexture                     = nullptr;
+    Texture*                                                                            m_hdrTexture = nullptr;
 
-    ID3D11Device*                                                                m_device           = nullptr;
-    ID3D11DeviceContext*                                                         m_deviceContext    = nullptr;
-    IDXGISwapChain*                                                              m_swapChain        = nullptr;
-    ID3D11RenderTargetView*                                                      m_renderTargetView = nullptr;
+    ID3D11Device*                                                                       m_device           = nullptr;
+    ID3D11DeviceContext*                                                                m_deviceContext    = nullptr;
+    IDXGISwapChain*                                                                     m_swapChain        = nullptr;
+    ID3D11RenderTargetView*                                                             m_renderTargetView = nullptr;
 
-    VertexBuffer*                                                                m_immediateVBO   = nullptr;
-    IndexBuffer*                                                                 m_immediateIBO   = nullptr;
-    ConstantBuffer*                                                              m_cameraCBO      = nullptr;
-    ConstantBuffer*                                                              m_modelCBO       = nullptr;
-    ConstantBuffer*                                                              m_matCBO         = nullptr;
-    ConstantBuffer*                                                              m_postProcessCBO = nullptr;
-    ConstantBuffer*                                                              m_prefilterCBO   = nullptr;
-    ConstantBuffer*                                                              m_skinCBO        = nullptr;
+    VertexBuffer*                                                                       m_immediateVBO   = nullptr;
+    IndexBuffer*                                                                        m_immediateIBO   = nullptr;
+    ConstantBuffer*                                                                     m_cameraCBO      = nullptr;
+    ConstantBuffer*                                                                     m_modelCBO       = nullptr;
+    ConstantBuffer*                                                                     m_matCBO         = nullptr;
+    ConstantBuffer*                                                                     m_postProcessCBO = nullptr;
+    ConstantBuffer*                                                                     m_prefilterCBO   = nullptr;
+    ConstantBuffer*                                                                     m_skinCBO        = nullptr;
 
-    std::array< SamplerMode, static_cast< int >( ResourceSlot::COUNT ) >         m_desiredSamplerModes;
-    std::array< ID3D11SamplerState*, static_cast< int >( ResourceSlot::COUNT ) > m_currentSamplerStates = {};
+    std::array< SamplerMode, static_cast< int >( ShaderResourceSlot ::COUNT ) >         m_desiredSamplerModes;
+    std::array< ID3D11SamplerState*, static_cast< int >( ShaderResourceSlot ::COUNT ) > m_currentSamplerStates = {};
 
-    ID3D11SamplerState*                                                          m_hdrSceneSampler                                           = nullptr;
-    ID3D11SamplerState*                                                          m_samplerState                                              = nullptr;
-    ID3D11SamplerState*                                                          m_samplerStates[ static_cast< int >( SamplerMode::COUNT ) ] = {};
+    ID3D11SamplerState*                                                                 m_hdrSceneSampler                                           = nullptr;
+    ID3D11SamplerState*                                                                 m_samplerState                                              = nullptr;
+    ID3D11SamplerState*                                                                 m_samplerStates[ static_cast< int >( SamplerMode::COUNT ) ] = {};
 
-    BlendMode                                                                    m_desiredBlendMode                                      = BlendMode::ALPHA;
-    ID3D11BlendState*                                                            m_blendState                                            = nullptr;
-    ID3D11BlendState*                                                            m_blendStates[ static_cast< int >( BlendMode::COUNT ) ] = {};
+    BlendMode                                                                           m_desiredBlendMode                                      = BlendMode::ALPHA;
+    ID3D11BlendState*                                                                   m_blendState                                            = nullptr;
+    ID3D11BlendState*                                                                   m_blendStates[ static_cast< int >( BlendMode::COUNT ) ] = {};
 
-    RasterizerMode                                                               m_desiredRasterizerMode                                           = RasterizerMode::SOLID_CULL_BACK;
-    ID3D11RasterizerState*                                                       m_rasterizerState                                                 = nullptr;
-    ID3D11RasterizerState*                                                       m_rasterizerStates[ static_cast< int >( RasterizerMode::COUNT ) ] = {};
+    RasterizerMode                                                                      m_desiredRasterizerMode                                           = RasterizerMode::SOLID_CULL_BACK;
+    ID3D11RasterizerState*                                                              m_rasterizerState                                                 = nullptr;
+    ID3D11RasterizerState*                                                              m_rasterizerStates[ static_cast< int >( RasterizerMode::COUNT ) ] = {};
 
-    DepthMode                                                                    m_desiredDepthMode                                             = DepthMode::READ_WRITE_LESS_EQUAL;
-    ID3D11Texture2D*                                                             m_depthStencilTexture                                          = nullptr;
-    ID3D11DepthStencilView*                                                      m_depthStencilDSV                                              = nullptr;
-    ID3D11DepthStencilView*                                                      m_shadowDSV                                                    = nullptr;
-    ID3D11DepthStencilState*                                                     m_depthStencilState                                            = nullptr;
-    ID3D11DepthStencilState*                                                     m_depthStencilStates[ static_cast< int >( DepthMode::COUNT ) ] = {};
+    DepthMode                                                                           m_desiredDepthMode                                             = DepthMode::READ_WRITE_LESS_EQUAL;
+    ID3D11Texture2D*                                                                    m_depthStencilTexture                                          = nullptr;
+    ID3D11DepthStencilView*                                                             m_depthStencilDSV                                              = nullptr;
+    ID3D11DepthStencilView*                                                             m_shadowDSV                                                    = nullptr;
+    ID3D11DepthStencilState*                                                            m_depthStencilState                                            = nullptr;
+    ID3D11DepthStencilState*                                                            m_depthStencilStates[ static_cast< int >( DepthMode::COUNT ) ] = {};
 
-    RenderTexture*                                                               m_hdrRenderTexture      = nullptr;
-    RenderTexture*                                                               m_brightPassTexture     = nullptr;
-    RenderTexture*                                                               m_horizontalBlurTexture = nullptr;
-    RenderTexture*                                                               m_verticalBlurTexture   = nullptr;
-    RenderTexture*                                                               m_brdfLUTTexture        = nullptr;
+    RenderTexture*                                                                      m_hdrRenderTexture      = nullptr;
+    RenderTexture*                                                                      m_brightPassTexture     = nullptr;
+    RenderTexture*                                                                      m_horizontalBlurTexture = nullptr;
+    RenderTexture*                                                                      m_verticalBlurTexture   = nullptr;
+    RenderTexture*                                                                      m_brdfLUTTexture        = nullptr;
 
-    CubemapTexture*                                                              m_environmentTexture = nullptr;
-    CubemapTexture*                                                              m_irradianceTexture  = nullptr;
-    CubemapTexture*                                                              m_prefilteredTexture = nullptr;
+    CubemapTexture*                                                                     m_environmentTexture = nullptr;
+    CubemapTexture*                                                                     m_irradianceTexture  = nullptr;
+    CubemapTexture*                                                                     m_prefilteredTexture = nullptr;
 
-    DepthRenderTexture*                                                          m_shadowMapTexture        = nullptr;
-    ID3D11SamplerState*                                                          m_shadowComparisonSampler = nullptr;
+    DepthRenderTexture*                                                                 m_shadowMapTexture        = nullptr;
+    ID3D11SamplerState*                                                                 m_shadowComparisonSampler = nullptr;
 
 private:
     VertexBuffer*               m_fullQuadVertexBuffer = nullptr;
