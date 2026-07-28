@@ -430,6 +430,9 @@
     <ClCompile Include="AnimationClip.cpp">
       <Filter>Core\Animation</Filter>
     </ClCompile>
+    <ClCompile Include="AnimationController.cpp">
+      <Filter>Core\Animation</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Renderer\Renderer.hpp">
@@ -673,6 +676,9 @@
       <Filter>Core\Model</Filter>
     </ClInclude>
     <ClInclude Include="AnimationClip.hpp">
+      <Filter>Core\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="AnimationController.hpp">
       <Filter>Core\Animation</Filter>
     </ClInclude>
   </ItemGroup>

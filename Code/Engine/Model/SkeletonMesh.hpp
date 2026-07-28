@@ -8,7 +8,6 @@
 #include <vector>
 
 //-----------------------------------------------------------------------------------------------
-struct Node;
 struct Material;
 struct SkeletonModel;
 

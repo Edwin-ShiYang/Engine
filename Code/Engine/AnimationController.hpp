@@ -1,13 +1,15 @@
 #pragma once
 #include "Model/ModelImporter.hpp"
 
+//-----------------------------------------------------------------------------------------------
 class Clock;
 
 //-----------------------------------------------------------------------------------------------
-class AnimController
+class AnimationController
 {
-    AnimController( Clock* parentClock );
-    ~AnimController() = default;
+public:
+    AnimationController( Clock* parentClock );
+    ~AnimationController();
 
     void Update();
 
