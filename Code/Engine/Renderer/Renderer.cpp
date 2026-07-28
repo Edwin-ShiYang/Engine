@@ -39,6 +39,7 @@
 #include "RendererTexture.hpp"
 #include "DepthRenderTexture.hpp"
 #include "CubemapTexture.hpp"
+#include "../RenderConstants.hpp"
 
 //----------------------------------------------------------------------------------------------
 struct TextureDescriptionConfig
@@ -142,6 +143,9 @@ void Renderer::Shutdown()
     delete m_postProcessCBO;
     m_postProcessCBO = nullptr;
 
+    delete m_skinCBO;
+    m_skinCBO = nullptr;
+
     ReleaseBlendResources();
     ReleaseSamplerResources();
     ReleaseRasterizerResources();
@@ -237,7 +241,7 @@ void Renderer::BeginCamera( Camera const& camera )
     cameraConstants.c_cameraWorldPos = camera.GetPosition();
 
     CopyCPUToGPU( &cameraConstants, sizeof( CameraConstants ), m_cameraCBO );
-    BindConstantBuffer( k_cameraConstantsSlot, m_cameraCBO );
+    BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::Camera ), m_cameraCBO );
 
     SetModelConstants();
 }
@@ -266,7 +270,7 @@ void Renderer::BeginCamera( Camera const& camera, Viewport const& viewport )
     cameraConstants.c_worldToCamera  = camera.GetWorldToCameraTransform();
 
     CopyCPUToGPU( &cameraConstants, sizeof( CameraConstants ), m_cameraCBO );
-    BindConstantBuffer( k_cameraConstantsSlot, m_cameraCBO );
+    BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::Camera ), m_cameraCBO );
 
     SetModelConstants();
 }
@@ -291,7 +295,7 @@ void Renderer::BeginCamera( Camera const& camera, float width, float height )
     cameraConstants.c_cameraWorldPos = camera.GetPosition();
 
     CopyCPUToGPU( &cameraConstants, sizeof( CameraConstants ), m_cameraCBO );
-    BindConstantBuffer( k_cameraConstantsSlot, m_cameraCBO );
+    BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::Camera ), m_cameraCBO );
 
     SetModelConstants();
 }
@@ -322,7 +326,7 @@ void Renderer::SetMaterialConstants( float metallic /*= 0.f*/, float roughness /
     materialConstants.c_emissiveIntensity = emissiveIntensity;
 
     g_engine->m_render->CopyCPUToGPU( &materialConstants, sizeof( MaterialConstants ), m_matCBO );
-    g_engine->m_render->BindConstantBuffer( k_materialConstantsSlot, m_matCBO );
+    g_engine->m_render->BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::Material ), m_matCBO );
 }
 
 //----------------------------------------------------------------------------------------------
@@ -332,7 +336,19 @@ void Renderer::SetPostProcessConstants() const
     postProcessConstants.c_width  = static_cast< float >( g_engine->m_window->GetClientDimensions().x );
     postProcessConstants.c_height = static_cast< float >( g_engine->m_window->GetClientDimensions().y );
     g_engine->m_render->CopyCPUToGPU( &postProcessConstants, sizeof( PostProcessConstants ), m_postProcessCBO );
-    g_engine->m_render->BindConstantBuffer( k_postProcessConstantsSlot, m_postProcessCBO );
+    g_engine->m_render->BindConstantBuffer( static_cast< unsigned >( ConstantBufferSlot::PostProcess ), m_postProcessCBO );
+}
+
+//----------------------------------------------------------------------------------------------
+void Renderer::SetSkinConstant( std::vector< Mat44 > const& skinMatrices ) const
+{
+    SkinConstants skinConstants;
+    for ( int i = 0; i < static_cast< int >( skinMatrices.size() ); ++i )
+    {
+        skinConstants.c_skinMatrices[ i ] = skinMatrices[ i ];
+    }
+    g_engine->m_render->CopyCPUToGPU( &skinConstants, sizeof( SkinConstants ), m_skinCBO );
+    g_engine->m_render->BindConstantBuffer( 7, m_skinCBO );
 }
 
 //------------------------------------------------------------------------------------------------
@@ -588,15 +604,15 @@ void Renderer::SetRasterizerMode( RasterizerMode rasterizerMode )
 void Renderer::SetModelConstants( Mat44 const& modelToWorldTransform /*= Mat44()*/, Rgba8 const& modelColor /*= Rgba8::WHITE */ )
 {
     ModelConstants modelConstants = ModelConstants();
-    modelConstants.u_modelToWorld = modelToWorldTransform;
+    modelConstants.c_modelToWorld = modelToWorldTransform;
 
-    modelConstants.u_modelTint[ 0 ] = NormalizeByte( modelColor.r );
-    modelConstants.u_modelTint[ 1 ] = NormalizeByte( modelColor.g );
-    modelConstants.u_modelTint[ 2 ] = NormalizeByte( modelColor.b );
-    modelConstants.u_modelTint[ 3 ] = NormalizeByte( modelColor.a );
+    modelConstants.c_modelTint[ 0 ] = NormalizeByte( modelColor.r );
+    modelConstants.c_modelTint[ 1 ] = NormalizeByte( modelColor.g );
+    modelConstants.c_modelTint[ 2 ] = NormalizeByte( modelColor.b );
+    modelConstants.c_modelTint[ 3 ] = NormalizeByte( modelColor.a );
 
     CopyCPUToGPU( &modelConstants, sizeof( ModelConstants ), m_modelCBO );
-    BindConstantBuffer( k_modelConstantsSlot, m_modelCBO );
+    BindConstantBuffer( static_cast< int >( ConstantBufferSlot::Model ), m_modelCBO );
 }
 
 //------------------------------------------------------------------------------------------------
@@ -825,6 +841,7 @@ void Renderer::CreateDefaultBuffers()
     m_matCBO         = CreateConstantBuffer( sizeof( MaterialConstants ) );
     m_postProcessCBO = CreateConstantBuffer( sizeof( PostProcessConstants ) );
     m_prefilterCBO   = CreateConstantBuffer( sizeof( PrefilterConstants ) );
+    m_skinCBO        = CreateConstantBuffer( sizeof( SkinConstants ) );
 }
 
 //------------------------------------------------------------------------------------------------
@@ -1393,11 +1410,11 @@ void Renderer::UnbindTexture( ResourceSlot slot )
 //------------------------------------------------------------------------------------------------
 void Renderer::UnbindTextures()
 {
-    g_engine->m_render->UnbindTexture( ResourceSlot::DIFFUSE );
-    g_engine->m_render->UnbindTexture( ResourceSlot::METALLIC );
-    g_engine->m_render->UnbindTexture( ResourceSlot::NORMAL );
-    g_engine->m_render->UnbindTexture( ResourceSlot::ROUGHNESS );
-    g_engine->m_render->UnbindTexture( ResourceSlot::AMBIENT_OCCLUSION );
+    UnbindTexture( ResourceSlot::DIFFUSE );
+    UnbindTexture( ResourceSlot::METALLIC );
+    UnbindTexture( ResourceSlot::NORMAL );
+    UnbindTexture( ResourceSlot::ROUGHNESS );
+    UnbindTexture( ResourceSlot::AMBIENT_OCCLUSION );
 }
 
 //------------------------------------------------------------------------------------------------
@@ -2016,11 +2033,11 @@ void Renderer::BeginShadowPass()
     viewport.MaxDepth       = 1.f;
 
     UnbindTexture( ResourceSlot::SHADOWMAP );
-    g_engine->m_render->m_deviceContext->RSSetViewports( 1, &viewport );
-    g_engine->m_render->m_deviceContext->OMSetRenderTargets( 0, nullptr, m_shadowMapTexture->m_depthStencilView );
+    m_deviceContext->RSSetViewports( 1, &viewport );
+    m_deviceContext->OMSetRenderTargets( 0, nullptr, m_shadowMapTexture->m_depthStencilView );
 
-    g_engine->m_render->m_deviceContext->ClearDepthStencilView( m_shadowMapTexture->m_depthStencilView, D3D11_CLEAR_DEPTH, 1.f, 0 );
-    g_engine->m_render->SetDepthMode( DepthMode::READ_WRITE_LESS_EQUAL );
+    m_deviceContext->ClearDepthStencilView( m_shadowMapTexture->m_depthStencilView, D3D11_CLEAR_DEPTH, 1.f, 0 );
+    SetDepthMode( DepthMode::READ_WRITE_LESS_EQUAL );
     BindShader( m_shadowMap );
 }
 
@@ -2067,7 +2084,7 @@ void Renderer::GeneratePrefilteredCubemap()
         PrefilterConstants constants = {};
         constants.c_roughness        = roughness;
         CopyCPUToGPU( &constants, sizeof( PrefilterConstants ), m_prefilterCBO );
-        BindConstantBuffer( k_prefilterConstantsSlot, m_prefilterCBO );
+        BindConstantBuffer( static_cast< unsigned int >( ConstantBufferSlot::Prefilter ), m_prefilterCBO );
 
         for ( unsigned int faceIndex = 0; faceIndex < 6; ++faceIndex )
         {

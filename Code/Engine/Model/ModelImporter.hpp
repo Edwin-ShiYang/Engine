@@ -91,6 +91,11 @@ struct SkeletonModel : public Model
 {
     SkeletonMesh m_skeletonMesh;
     Skeleton     m_skeleton;
+
+    int          GetNumJoints() const
+    {
+        return static_cast< unsigned int >( m_skeleton.m_joints.size() );
+    }
 };
 
 //-----------------------------------------------------------------------------------------------

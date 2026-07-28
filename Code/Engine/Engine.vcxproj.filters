@@ -681,5 +681,8 @@
     <ClInclude Include="AnimationController.hpp">
       <Filter>Core\Animation</Filter>
     </ClInclude>
+    <ClInclude Include="RenderConstants.hpp">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

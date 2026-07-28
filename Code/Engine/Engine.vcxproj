@@ -472,6 +472,7 @@
     <ClInclude Include="Model\StaticMesh.hpp" />
     <ClInclude Include="Model\StaticMeshSection.hpp" />
     <ClInclude Include="Network\NetworkSystem.hpp" />
+    <ClInclude Include="RenderConstants.hpp" />
     <ClInclude Include="Renderer\BitmapFont.hpp" />
     <ClInclude Include="Renderer\Camera.hpp" />
     <ClInclude Include="Renderer\ConstantBuffer.hpp" />

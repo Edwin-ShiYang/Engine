@@ -58,19 +58,6 @@ class CubemapTexture;
 #endif
 
 //----------------------------------------------------------------------------------------------
-#pragma region ConstantBuffers
-
-//----------------------------------------------------------------------------------------------
-enum ConstantBufferSlot
-{
-    SLOT_ENGINE = 0,
-    SLOT_PERFRAME,
-    SLOT_CAMERA,
-    SLOT_MODEL,
-    SLOT_LIGHT
-};
-
-//----------------------------------------------------------------------------------------------
 enum class VertexType
 {
     VERTEX_PCUTBN,
@@ -85,64 +72,6 @@ enum class DefaultTexture
     NORMAL,
     SPEC_GLOSS_EMIT
 };
-
-//----------------------------------------------------------------------------------------------
-struct CameraConstants
-{
-    Mat44 c_renderToClip;
-    Mat44 c_cameraToRender;
-    Mat44 c_worldToCamera;
-    Vec3  c_cameraWorldPos;
-    float pad0;
-};
-
-static constexpr int k_cameraConstantsSlot = 2;
-
-//----------------------------------------------------------------------------------------------
-struct ModelConstants
-{
-    Mat44 u_modelToWorld;
-    float u_modelTint[ 4 ];
-};
-
-static constexpr int k_modelConstantsSlot = 3;
-#pragma endregion
-
-//-----------------------------------------------------------------------------------------------
-struct MaterialConstants
-{
-    float c_metallic;
-    float c_roughness;
-    float c_ambientOcclusion;
-    float pad0;
-    float c_emissiveColor[ 4 ];
-    float c_emissiveIntensity;
-    float pad1;
-    float pad2;
-    float pad3;
-};
-static constexpr int k_materialConstantsSlot = 9;
-
-//----------------------------------------------------------------------------------------------
-struct PostProcessConstants
-{
-    float c_width;
-    float c_height;
-    float pad0;
-    float pad1;
-};
-static constexpr int k_postProcessConstantsSlot = 5;
-
-//----------------------------------------------------------------------------------------------
-struct PrefilterConstants
-{
-    float c_roughness;
-    float padding0;
-    float padding1;
-    float padding2;
-};
-
-static constexpr int k_prefilterConstantsSlot = 6;
 
 //----------------------------------------------------------------------------------------------
 enum class BlendMode
@@ -286,6 +215,7 @@ public:
     void                SetRenderTarget( ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv = nullptr );
     void                SetMaterialConstants( float metallic = 0.f, float roughness = 0.5f, float ambientOcclusion = 1.0f, float emissiveIntensity = 0.f, Rgba8 emissiveColor = Rgba8::WHITE ) const;
     void                SetPostProcessConstants() const;
+    void                SetSkinConstant( std::vector< Mat44 > const& skinMatrices ) const;
 
     void                ClearScreen( Rgba8 const& clearColor );
     void                ClearRenderTarget( ID3D11RenderTargetView* rtv, ID3D11DepthStencilView* dsv = nullptr, Rgba8 const& clearColor = Rgba8::BLACK );
@@ -465,6 +395,7 @@ public:
     ConstantBuffer*                                                              m_matCBO         = nullptr;
     ConstantBuffer*                                                              m_postProcessCBO = nullptr;
     ConstantBuffer*                                                              m_prefilterCBO   = nullptr;
+    ConstantBuffer*                                                              m_skinCBO        = nullptr;
 
     std::array< SamplerMode, static_cast< int >( ResourceSlot::COUNT ) >         m_desiredSamplerModes;
     std::array< ID3D11SamplerState*, static_cast< int >( ResourceSlot::COUNT ) > m_currentSamplerStates = {};
