@@ -112,7 +112,7 @@ void Renderer::Startup()
     GeneratePrefilteredCubemap();
     GenerateBRDFLUT();
 
-    BindDefaultShader();
+    BindShader( ShaderType::Default );
     BindTexture( nullptr );
 }
 
@@ -852,46 +852,46 @@ BitmapFont* Renderer::CreateBitmapFont( char const* fontFilePathNameWithNoExtens
 }
 
 //------------------------------------------------------------------------------------------------
-char const* Renderer::GetSemanticName( VertexAttributeType type )
+char const* Renderer::GetSemanticName( VertexLayoutAttribute type )
 {
     switch ( type )
     {
-        case VertexAttributeType::POSITION:
+        case VertexLayoutAttribute::POSITION:
             {
                 return "VERTEX_POSITION";
             }
 
-        case VertexAttributeType::COLOR:
+        case VertexLayoutAttribute::COLOR:
             {
                 return "VERTEX_COLOR";
             }
 
-        case VertexAttributeType::UVTEXCOORDS:
+        case VertexLayoutAttribute::UVTEXCOORDS:
             {
                 return "VERTEX_UVTEXCOORDS";
             }
 
-        case VertexAttributeType::TANGENT:
+        case VertexLayoutAttribute::TANGENT:
             {
                 return "VERTEX_TANGENT";
             }
 
-        case VertexAttributeType::BITANGENT:
+        case VertexLayoutAttribute::BITANGENT:
             {
                 return "VERTEX_BITANGENT";
             }
 
-        case VertexAttributeType::NORMAL:
+        case VertexLayoutAttribute::NORMAL:
             {
                 return "VERTEX_NORMAL";
             }
 
-        case VertexAttributeType::JOINTINDICES:
+        case VertexLayoutAttribute::JOINTINDICES:
             {
                 return "VERTEX_JOINTINDICES";
             }
 
-        case VertexAttributeType::JOINTWEIGHTS:
+        case VertexLayoutAttribute::JOINTWEIGHTS:
             {
                 return "VERTEX_JOINTWEIGHTS";
             }
@@ -957,7 +957,7 @@ Shader* Renderer::CreateShaderAndComplie( char const* shaderName, char const* sh
 }
 
 //------------------------------------------------------------------------------------------------
-Shader* Renderer::CreateShaderAndComplie( char const* shaderName, VertexType vertexType )
+Shader* Renderer::CreateShaderAndComplie( char const* shaderName, VertexLayoutType vertexType )
 {
     std::string shaderFileName = std::string( shaderName ) + ".hlsl";
     std::string shaderSource;
@@ -1002,8 +1002,8 @@ Shader* Renderer::CreateShaderAndComplie( char const* shaderName, VertexType ver
     VertexDescriptor                        vertexDescriptor = GetVertexDescriptor( vertexType );
     for ( int attributeIndex = 0; attributeIndex < static_cast< int >( vertexDescriptor.m_attributes.size() ); ++attributeIndex )
     {
-        VertexDescriptorAttribute const& attribute    = vertexDescriptor.m_attributes[ attributeIndex ];
-        char const*                      semanticName = GetSemanticName( attribute.m_semanticName );
+        VertexLayout const& attribute    = vertexDescriptor.m_attributes[ attributeIndex ];
+        char const*         semanticName = GetSemanticName( attribute.m_semanticName );
         inputElementDescs.push_back( { semanticName, 0, attribute.m_format, 0, attribute.m_alignedByteOffset, D3D11_INPUT_PER_VERTEX_DATA, 0 } );
     }
 
@@ -1025,7 +1025,7 @@ Shader* Renderer::CreateShaderAndComplie( char const* shaderName, VertexType ver
 }
 
 //------------------------------------------------------------------------------------------------
-Shader* Renderer::CreateOrGetShader( char const* shaderName, VertexType vertexType )
+Shader* Renderer::CreateOrGetShader( char const* shaderName, VertexLayoutType vertexType )
 {
     for ( int shaderIndex = 0; shaderIndex < static_cast< int >( m_loadedShaders.size() ); ++shaderIndex )
     {
@@ -1128,27 +1128,27 @@ CubemapTexture* Renderer::CreateCubemapTexture( int width, int height, int mipLe
 }
 
 //------------------------------------------------------------------------------------------------
-VertexDescriptor Renderer::GetVertexDescriptor( VertexType vertexType )
+VertexDescriptor Renderer::GetVertexDescriptor( VertexLayoutType vertexType )
 {
     VertexDescriptor vertexDescriptor;
-    vertexDescriptor.m_attributes.emplace_back( VertexAttributeType::POSITION, 0, DXGI_FORMAT_R32G32B32_FLOAT );
-    vertexDescriptor.m_attributes.emplace_back( VertexAttributeType::COLOR, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R8G8B8A8_UNORM );
-    vertexDescriptor.m_attributes.emplace_back( VertexAttributeType::UVTEXCOORDS, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32_FLOAT );
-    vertexDescriptor.m_attributes.emplace_back( VertexAttributeType::TANGENT, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32_FLOAT );
-    vertexDescriptor.m_attributes.emplace_back( VertexAttributeType::BITANGENT, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32_FLOAT );
-    vertexDescriptor.m_attributes.emplace_back( VertexAttributeType::NORMAL, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32_FLOAT );
+    vertexDescriptor.m_attributes.emplace_back( VertexLayoutAttribute::POSITION, 0, DXGI_FORMAT_R32G32B32_FLOAT );
+    vertexDescriptor.m_attributes.emplace_back( VertexLayoutAttribute::COLOR, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R8G8B8A8_UNORM );
+    vertexDescriptor.m_attributes.emplace_back( VertexLayoutAttribute::UVTEXCOORDS, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32_FLOAT );
+    vertexDescriptor.m_attributes.emplace_back( VertexLayoutAttribute::TANGENT, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32_FLOAT );
+    vertexDescriptor.m_attributes.emplace_back( VertexLayoutAttribute::BITANGENT, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32_FLOAT );
+    vertexDescriptor.m_attributes.emplace_back( VertexLayoutAttribute::NORMAL, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32_FLOAT );
 
     switch ( vertexType )
     {
-        case VertexType::VERTEX_PCUTBN:
+        case VertexLayoutType::PCUTBN:
             {
                 return vertexDescriptor;
             }
 
-        case VertexType::VERTEX_SKINNED:
+        case VertexLayoutType::Skinned:
             {
-                vertexDescriptor.m_attributes.emplace_back( VertexAttributeType::JOINTINDICES, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32A32_SINT );
-                vertexDescriptor.m_attributes.emplace_back( VertexAttributeType::JOINTWEIGHTS, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32A32_FLOAT );
+                vertexDescriptor.m_attributes.emplace_back( VertexLayoutAttribute::JOINTINDICES, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32A32_SINT );
+                vertexDescriptor.m_attributes.emplace_back( VertexLayoutAttribute::JOINTWEIGHTS, D3D11_APPEND_ALIGNED_ELEMENT, DXGI_FORMAT_R32G32B32A32_FLOAT );
 
                 return vertexDescriptor;
             }
@@ -1161,19 +1161,19 @@ VertexDescriptor Renderer::GetVertexDescriptor( VertexType vertexType )
 //------------------------------------------------------------------------------------------------
 void Renderer::CreateDefaultShaders()
 {
-    m_defaultShader            = CreateShaderAndComplie( "Data/Shaders/Default", VertexType::VERTEX_PCUTBN );
-    m_pbrLitStatic             = CreateShaderAndComplie( m_config.m_pbrLitStatic.c_str(), VertexType::VERTEX_PCUTBN );
-    m_pbrLitSkinned            = CreateShaderAndComplie( m_config.m_pbrLitSkinned.c_str(), VertexType::VERTEX_SKINNED );
-    m_brightPass               = CreateShaderAndComplie( m_config.m_brightPass.c_str(), VertexType::VERTEX_PCUTBN );
-    m_horizontalBlur           = CreateShaderAndComplie( m_config.m_horizontalBlurPass.c_str(), VertexType::VERTEX_PCUTBN );
-    m_verticalBlur             = CreateShaderAndComplie( m_config.m_verticalBlurPass.c_str(), VertexType::VERTEX_PCUTBN );
-    m_toneMapping              = CreateShaderAndComplie( m_config.m_toneMappingPass.c_str(), VertexType::VERTEX_PCUTBN );
-    m_shadowMap                = CreateShaderAndComplie( m_config.m_shadowMap.c_str(), VertexType::VERTEX_PCUTBN );
-    m_skybox                   = CreateShaderAndComplie( m_config.m_skybox.c_str(), VertexType::VERTEX_PCUTBN );
-    m_equirectangularToCubemap = CreateShaderAndComplie( m_config.m_equirectangularToCubemap.c_str(), VertexType::VERTEX_PCUTBN );
-    m_irradianceConvolution    = CreateShaderAndComplie( m_config.m_irradianceConvolution.c_str(), VertexType::VERTEX_PCUTBN );
-    m_prefilterEnvironment     = CreateShaderAndComplie( m_config.m_prefilterEnvironment.c_str(), VertexType::VERTEX_PCUTBN );
-    m_brdfIntegration          = CreateShaderAndComplie( m_config.m_brdfIntegration.c_str(), VertexType::VERTEX_PCUTBN );
+    m_defaultShader            = CreateShaderAndComplie( "Data/Shaders/Default", VertexLayoutType::PCUTBN );
+    m_pbrLitStatic             = CreateShaderAndComplie( m_config.m_pbrLitStatic.c_str(), VertexLayoutType::PCUTBN );
+    m_pbrLitSkinned            = CreateShaderAndComplie( m_config.m_pbrLitSkinned.c_str(), VertexLayoutType::Skinned );
+    m_brightPass               = CreateShaderAndComplie( m_config.m_brightPass.c_str(), VertexLayoutType::PCUTBN );
+    m_horizontalBlur           = CreateShaderAndComplie( m_config.m_horizontalBlurPass.c_str(), VertexLayoutType::PCUTBN );
+    m_verticalBlur             = CreateShaderAndComplie( m_config.m_verticalBlurPass.c_str(), VertexLayoutType::PCUTBN );
+    m_toneMapping              = CreateShaderAndComplie( m_config.m_toneMappingPass.c_str(), VertexLayoutType::PCUTBN );
+    m_shadowMap                = CreateShaderAndComplie( m_config.m_shadowMap.c_str(), VertexLayoutType::PCUTBN );
+    m_skybox                   = CreateShaderAndComplie( m_config.m_skybox.c_str(), VertexLayoutType::PCUTBN );
+    m_equirectangularToCubemap = CreateShaderAndComplie( m_config.m_equirectangularToCubemap.c_str(), VertexLayoutType::PCUTBN );
+    m_irradianceConvolution    = CreateShaderAndComplie( m_config.m_irradianceConvolution.c_str(), VertexLayoutType::PCUTBN );
+    m_prefilterEnvironment     = CreateShaderAndComplie( m_config.m_prefilterEnvironment.c_str(), VertexLayoutType::PCUTBN );
+    m_brdfIntegration          = CreateShaderAndComplie( m_config.m_brdfIntegration.c_str(), VertexLayoutType::PCUTBN );
 
     BindShader( m_defaultShader );
 }
@@ -1368,19 +1368,14 @@ void Renderer::BindShader( ShaderType type )
             break;
 
         default:
-            ERROR_AND_DIE( "unknown shader" );
+            shader = m_defaultShader;
+            break;
     }
 
     GUARANTEE_OR_DIE( shader, Stringf( "Renderer::BindShader - Shader is null" ) );
     m_deviceContext->VSSetShader( shader->m_vertexShader, nullptr, 0 );
     m_deviceContext->PSSetShader( shader->m_pixelShader, nullptr, 0 );
     m_deviceContext->IASetInputLayout( shader->m_inputLayout );
-}
-
-//---------------------------------------------------------------------------------------------
-void Renderer::BindDefaultShader()
-{
-    BindShader( m_defaultShader );
 }
 
 //------------------------------------------------------------------------------------------------
@@ -1415,24 +1410,6 @@ void Renderer::UnbindTextures()
     UnbindTexture( ResourceSlot::NORMAL );
     UnbindTexture( ResourceSlot::ROUGHNESS );
     UnbindTexture( ResourceSlot::AMBIENT_OCCLUSION );
-}
-
-//------------------------------------------------------------------------------------------------
-Texture const* Renderer::GetTexture( DefaultTexture textureType )
-{
-    switch ( textureType )
-    {
-        case DefaultTexture::DIFFUSE:
-            return m_defaultDiffuseTexture;
-
-        case DefaultTexture::NORMAL:
-            return m_defaultNormalTexture;
-
-        case DefaultTexture::SPEC_GLOSS_EMIT:
-            return m_defaultSGETexture;
-    }
-
-    return m_defaultWhiteTexture;
 }
 
 //------------------------------------------------------------------------------------------------
@@ -1975,7 +1952,7 @@ void Renderer::ConvertEquirectangularToCubemap( Texture* texture )
     UnbindTexture( ResourceSlot::ENVIRONMENTCUBEMAP );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_BACK );
     SetDepthMode( DepthMode::READ_WRITE_LESS_EQUAL );
-    BindDefaultShader();
+    BindShader( ShaderType::Default );
 
     SetRenderTarget( m_renderTargetView, m_depthStencilDSV );
     ClearRenderTarget( m_renderTargetView );
@@ -2015,7 +1992,7 @@ void Renderer::GenerateIrradianceCubemap()
     UnbindTexture( ResourceSlot::ENVIRONMENTCUBEMAP );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_BACK );
     SetDepthMode( DepthMode::READ_WRITE_LESS_EQUAL );
-    BindDefaultShader();
+    BindShader( ShaderType::Default );
 
     SetRenderTarget( m_renderTargetView, m_depthStencilDSV );
     ClearRenderTarget( m_renderTargetView );
@@ -2110,7 +2087,7 @@ void Renderer::GeneratePrefilteredCubemap()
     UnbindTexture( ResourceSlot::ENVIRONMENTCUBEMAP );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_BACK );
     SetDepthMode( DepthMode::READ_WRITE_LESS_EQUAL );
-    BindDefaultShader();
+    BindShader( ShaderType::Default );
 
     SetRenderTarget( m_renderTargetView, m_depthStencilDSV );
     ClearRenderTarget( m_renderTargetView );
@@ -2148,7 +2125,7 @@ void Renderer::GenerateBRDFLUT()
     SetBlendMode( BlendMode::ALPHA );
     SetDepthMode( DepthMode::READ_WRITE_LESS_EQUAL );
     SetRasterizerMode( RasterizerMode::SOLID_CULL_BACK );
-    BindDefaultShader();
+    BindShader( ShaderType::Default );
 
     SetRenderTarget( m_renderTargetView, m_depthStencilDSV );
     ClearRenderTarget( m_renderTargetView );

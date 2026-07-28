@@ -12,6 +12,7 @@ enum class ConstantBufferSlot : int
     Prefilter   = 6,
     Skin        = 7,
     Material    = 9
+    // use 8 first
 };
 
 //----------------------------------------------------------------------------------------------

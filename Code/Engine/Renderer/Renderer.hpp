@@ -8,12 +8,10 @@
 #include "Game/EngineBuildPreferences.hpp"
 
 //----------------------------------------------------------------------------------------------
-#include "dxgiformat.h"
-
-//----------------------------------------------------------------------------------------------
 #include <map>
 #include <vector>
 #include <array>
+#include "../VertexLayout.hpp.hpp"
 
 //----------------------------------------------------------------------------------------------
 struct ID3D11Device;
@@ -56,22 +54,6 @@ class CubemapTexture;
 #if defined( OPAQUE )
 #undef OPAQUE
 #endif
-
-//----------------------------------------------------------------------------------------------
-enum class VertexType
-{
-    VERTEX_PCUTBN,
-    VERTEX_SKINNED,
-};
-
-//----------------------------------------------------------------------------------------------
-enum class DefaultTexture
-{
-    WHITE,
-    DIFFUSE,
-    NORMAL,
-    SPEC_GLOSS_EMIT
-};
 
 //----------------------------------------------------------------------------------------------
 enum class BlendMode
@@ -138,41 +120,8 @@ enum class ShaderType : int
     PBRLitStatic = 0,
     PBRLitSkinned,
     ShadowMap,
+    Default,
     COUNT
-};
-
-//----------------------------------------------------------------------------------------------
-enum class VertexAttributeType
-{
-    POSITION,
-    COLOR,
-    UVTEXCOORDS,
-    TANGENT,
-    BITANGENT,
-    NORMAL,
-    JOINTINDICES,
-    JOINTWEIGHTS
-};
-
-//----------------------------------------------------------------------------------------------
-struct VertexDescriptorAttribute
-{
-    VertexAttributeType m_semanticName;
-    unsigned int        m_alignedByteOffset;
-    DXGI_FORMAT         m_format;
-
-    VertexDescriptorAttribute( VertexAttributeType semanticName, unsigned int alignedByteOffset, DXGI_FORMAT format )
-        : m_semanticName( semanticName )
-        , m_alignedByteOffset( alignedByteOffset )
-        , m_format( format )
-    {
-    }
-};
-
-//----------------------------------------------------------------------------------------------
-struct VertexDescriptor
-{
-    std::vector< VertexDescriptorAttribute > m_attributes;
 };
 
 //----------------------------------------------------------------------------------------------
@@ -228,8 +177,6 @@ public:
     void                BindShader( Shader* shader );
     void                BindShader( ShaderType type );
 
-    void                BindDefaultShader();
-
     void                BindTexture( Texture const* texture );
     void                BindTexture( TextureBase const* texture, ResourceSlot slot );
     void                UnbindTexture( ResourceSlot slot );
@@ -242,15 +189,14 @@ public:
     void                ResetSamplerModes();
 
     Shader*             CreateShaderAndComplie( char const* shaderName, char const* shaderSource );
-    Shader*             CreateOrGetShader( char const* shaderName, VertexType vertexType = VertexType::VERTEX_PCUTBN );
-    Shader*             CreateShaderAndComplie( char const* shaderName, VertexType vertexType = VertexType::VERTEX_PCUTBN );
+    Shader*             CreateOrGetShader( char const* shaderName, VertexLayoutType vertexType = VertexLayoutType::PCUTBN );
+    Shader*             CreateShaderAndComplie( char const* shaderName, VertexLayoutType vertexType = VertexLayoutType::PCUTBN );
 
     RenderTexture*      CreateRenderTexture();
     RenderTexture*      CreateRenderTexture( unsigned int width, unsigned int height, DXGI_FORMAT format );
 
     DepthRenderTexture* CreateDepthTexture();
 
-    Texture const*      GetTexture( DefaultTexture textureType );
     Texture*            CreateTextureFromImage( Image const& image );
     Texture*            CreateOrGetHDRTextureFromFile( char const* imageFilePath );
     Texture*            CreateOrGetTextureFromFile( char const* imageFilePath );
@@ -322,8 +268,8 @@ private:
     void             DestroyTextures();
     void             DestroyShaders();
 
-    VertexDescriptor GetVertexDescriptor( VertexType vertexType = VertexType::VERTEX_PCUTBN );
-    char const*      GetSemanticName( VertexAttributeType type );
+    VertexDescriptor GetVertexDescriptor( VertexLayoutType vertexType = VertexLayoutType::PCUTBN );
+    char const*      GetSemanticName( VertexLayoutAttribute type );
 
     void             InitializeBlendModes();
     void             InitializeBlendStates();

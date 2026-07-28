@@ -684,5 +684,8 @@
     <ClInclude Include="RenderConstants.hpp">
       <Filter>Renderer</Filter>
     </ClInclude>
+    <ClInclude Include="VertexLayout.hpp.hpp">
+      <Filter>Renderer</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>
