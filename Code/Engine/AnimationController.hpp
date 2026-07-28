@@ -9,9 +9,8 @@ class AnimationController
 {
 public:
     AnimationController( Clock* parentClock );
-    ~AnimationController();
-
-    void Update();
+    virtual ~AnimationController();
+    virtual void Update();
 
 public:
     Clock* m_clock = nullptr;

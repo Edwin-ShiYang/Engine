@@ -13,3 +13,8 @@ AnimationController::~AnimationController()
     delete m_clock;
     m_clock = nullptr;
 }
+
+//-----------------------------------------------------------------------------------------------
+void AnimationController::Update()
+{
+}

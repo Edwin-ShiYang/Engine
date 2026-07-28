@@ -1145,7 +1145,7 @@ VertexDescriptor Renderer::GetVertexDescriptor( VertexType vertexType )
 void Renderer::CreateDefaultShaders()
 {
     m_defaultShader            = CreateShaderAndComplie( "Data/Shaders/Default", VertexType::VERTEX_PCUTBN );
-    m_pbrLitShader             = CreateShaderAndComplie( m_config.m_pbrLit.c_str(), VertexType::VERTEX_PCUTBN );
+    m_pbrLitShader             = CreateShaderAndComplie( m_config.m_pbrLit.c_str(), VertexType::VERTEX_SKINNED );
     m_brightPass               = CreateShaderAndComplie( m_config.m_brightPass.c_str(), VertexType::VERTEX_PCUTBN );
     m_horizontalBlur           = CreateShaderAndComplie( m_config.m_horizontalBlurPass.c_str(), VertexType::VERTEX_PCUTBN );
     m_verticalBlur             = CreateShaderAndComplie( m_config.m_verticalBlurPass.c_str(), VertexType::VERTEX_PCUTBN );

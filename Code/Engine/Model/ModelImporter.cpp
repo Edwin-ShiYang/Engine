@@ -37,6 +37,7 @@ StaticModel* ModelImporter::CreateOrGetStaticModelFromFile( std::string const& f
     }
 
     Assimp::Importer importer;
+    importer.SetPropertyBool( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false );
     importer.SetPropertyFloat( AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.f );
     aiScene const* scene = importer.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals );
     GUARANTEE_OR_DIE( scene, Stringf( "ModelImporter::CreateOrGetModelFromFile - Failed to load file: %s", filePath.c_str() ) );
@@ -61,6 +62,7 @@ SkeletonModel* ModelImporter::CreateOrGetSkeletonModelFromFile( std::string cons
     }
 
     Assimp::Importer importer;
+    importer.SetPropertyBool( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false );
     importer.SetPropertyFloat( AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.f );
     aiScene const* scene = importer.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_CalcTangentSpace | aiProcess_GenSmoothNormals );
     GUARANTEE_OR_DIE( scene, Stringf( "ModelImporter::CreateOrGetSkeletonModelFromFile - Failed to load file: %s", filePath.c_str() ) );
@@ -83,7 +85,7 @@ AnimationClip* ModelImporter::CreateOrGetAnimationFromFile( std::string const& f
     animImporter.SetPropertyBool( AI_CONFIG_IMPORT_FBX_PRESERVE_PIVOTS, false );
     animImporter.SetPropertyFloat( AI_CONFIG_GLOBAL_SCALE_FACTOR_KEY, 1.f );
 
-    aiScene const*     animScene     = animImporter.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_MakeLeftHanded | aiProcess_TransformUVCoords | aiProcess_CalcTangentSpace );
+    aiScene const*     animScene     = animImporter.ReadFile( filePath, aiProcess_Triangulate | aiProcess_GlobalScale | aiProcess_TransformUVCoords | aiProcess_CalcTangentSpace );
     aiAnimation const* animation     = animScene->mAnimations[ 0 ];
     AnimationClip*     animationClip = new AnimationClip();
     animationClip->m_name            = animation->mName.C_Str();
