@@ -6,8 +6,9 @@
 //-----------------------------------------------------------------------------------------------
 struct AbilitySystemConfig
 {
-    bool        m_isEnabled                  = true;
-    std::string m_gameplayEffectDefsFilePath = "";
+    bool        m_isEnabled                          = true;
+    std::string m_gameplayEffectDefsFilePath         = "";
+    std::string m_abilitySystemComponentDefsFilePath = "";
 };
 
 //-----------------------------------------------------------------------------------------------

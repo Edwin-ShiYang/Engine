@@ -350,7 +350,9 @@
     <ClCompile Include="..\ThirdParty\TinyXML2\tinyxml2.cpp" />
     <ClCompile Include="AbilitySystem\AbilitySystem.cpp" />
     <ClCompile Include="AbilitySystem\AbilitySystemComponent.cpp" />
+    <ClCompile Include="AbilitySystem\AbilitySystemComponentDefinition.cpp" />
     <ClCompile Include="AbilitySystem\AttributeSet.cpp" />
+    <ClCompile Include="AbilitySystem\AttributeSetDefinition.cpp" />
     <ClCompile Include="AbilitySystem\GameplayEffect.cpp" />
     <ClCompile Include="AbilitySystem\GameplayEffectDefinition.cpp" />
     <ClCompile Include="AbilitySystem\GameplayModifierDefinition.cpp" />
@@ -440,7 +442,9 @@
     <ClInclude Include="..\ThirdParty\TinyXML2\tinyxml2.h" />
     <ClInclude Include="AbilitySystem\AbilitySystem.hpp" />
     <ClInclude Include="AbilitySystem\AbilitySystemComponent.hpp" />
+    <ClInclude Include="AbilitySystem\AbilitySystemComponentDefinition.hpp" />
     <ClInclude Include="AbilitySystem\AttributeSet.hpp" />
+    <ClInclude Include="AbilitySystem\AttributeSetDefinition.hpp" />
     <ClInclude Include="AbilitySystem\GameplayEffect.hpp" />
     <ClInclude Include="AbilitySystem\GameplayEffectDefinition.hpp" />
     <ClInclude Include="AbilitySystem\GameplayModifierDefinition.hpp" />

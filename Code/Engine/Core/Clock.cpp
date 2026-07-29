@@ -165,20 +165,19 @@ void Clock::Tick()
         m_lastUpdateTimeInSeconds = currentTimeSeconds;
 
         Advance( deltaSeconds );
+
+        double timeNow            = GetCurrentTimeSeconds();
+        m_deltaSeconds            = GetClamped( timeNow - m_lastUpdateTimeInSeconds, 0.0, m_maxDeltaSeconds );
+        m_lastUpdateTimeInSeconds = timeNow;
+        Advance( m_deltaSeconds );
     */
-    /*
+
     double timeNow = GetCurrentTimeSeconds();
     while ( timeNow - m_lastUpdateTimeInSeconds < m_maxDeltaSeconds )
     {
         timeNow = GetCurrentTimeSeconds();
     }
     m_deltaSeconds            = timeNow - m_lastUpdateTimeInSeconds;
-    m_lastUpdateTimeInSeconds = timeNow;
-    Advance( m_deltaSeconds );
-    */
-
-    double timeNow            = GetCurrentTimeSeconds();
-    m_deltaSeconds            = GetClamped( timeNow - m_lastUpdateTimeInSeconds, 0.0, m_maxDeltaSeconds );
     m_lastUpdateTimeInSeconds = timeNow;
     Advance( m_deltaSeconds );
 }

@@ -215,6 +215,18 @@
     <Filter Include="Core\AbilitySystem\AttributeSet">
       <UniqueIdentifier>{d4780ab9-6c7d-4747-9e76-f76b70d67070}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\AbilitySystem\AbilitySystemComponentDefinition">
+      <UniqueIdentifier>{1d7452ee-183b-4d59-90e6-d41b1b379f85}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\AbilitySystem\AttributeSetDefinition">
+      <UniqueIdentifier>{85bb74f2-e639-4efe-9010-b8212fb5d536}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\AbilitySystem\GameplayEffectDefinition">
+      <UniqueIdentifier>{e0f6ff4f-f26a-487c-b369-3544f9609ca6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\AbilitySystem\GameplayModifierDefinition">
+      <UniqueIdentifier>{4d48a940-0dbc-41df-9f3f-a573d53c0bab}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer\Renderer.cpp">
@@ -457,9 +469,6 @@
     <ClCompile Include="AbilitySystem\GameplayEffect.cpp">
       <Filter>Core\AbilitySystem\GameplayEffect</Filter>
     </ClCompile>
-    <ClCompile Include="AbilitySystem\GameplayEffectDefinition.cpp">
-      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
-    </ClCompile>
     <ClCompile Include="AbilitySystem\AbilitySystem.cpp">
       <Filter>Core\AbilitySystem</Filter>
     </ClCompile>
@@ -469,8 +478,17 @@
     <ClCompile Include="AbilitySystem\AttributeSet.cpp">
       <Filter>Core\AbilitySystem\AttributeSet</Filter>
     </ClCompile>
+    <ClCompile Include="AbilitySystem\AbilitySystemComponentDefinition.cpp">
+      <Filter>Core\AbilitySystem\AbilitySystemComponentDefinition</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystem\AttributeSetDefinition.cpp">
+      <Filter>Core\AbilitySystem\AttributeSetDefinition</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystem\GameplayEffectDefinition.cpp">
+      <Filter>Core\AbilitySystem\GameplayEffectDefinition</Filter>
+    </ClCompile>
     <ClCompile Include="AbilitySystem\GameplayModifierDefinition.cpp">
-      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
+      <Filter>Core\AbilitySystem\GameplayModifierDefinition</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -735,9 +753,6 @@
     <ClInclude Include="AbilitySystem\GameplayEffect.hpp">
       <Filter>Core\AbilitySystem\GameplayEffect</Filter>
     </ClInclude>
-    <ClInclude Include="AbilitySystem\GameplayEffectDefinition.hpp">
-      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
-    </ClInclude>
     <ClInclude Include="AbilitySystem\AbilitySystem.hpp">
       <Filter>Core\AbilitySystem</Filter>
     </ClInclude>
@@ -747,8 +762,17 @@
     <ClInclude Include="AbilitySystem\AttributeSet.hpp">
       <Filter>Core\AbilitySystem\AttributeSet</Filter>
     </ClInclude>
+    <ClInclude Include="AbilitySystem\AbilitySystemComponentDefinition.hpp">
+      <Filter>Core\AbilitySystem\AbilitySystemComponentDefinition</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystem\AttributeSetDefinition.hpp">
+      <Filter>Core\AbilitySystem\AttributeSetDefinition</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystem\GameplayEffectDefinition.hpp">
+      <Filter>Core\AbilitySystem\GameplayEffectDefinition</Filter>
+    </ClInclude>
     <ClInclude Include="AbilitySystem\GameplayModifierDefinition.hpp">
-      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
+      <Filter>Core\AbilitySystem\GameplayModifierDefinition</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>
