@@ -15,6 +15,12 @@ float AttributeSet::GetAttribute( std::string const& name ) const
 }
 
 //-----------------------------------------------------------------------------------------------
+Attributes AttributeSet::GetAttributes() const
+{
+    return m_attributes;
+}
+
+//-----------------------------------------------------------------------------------------------
 bool AttributeSet::HasAttribute( std::string const& name ) const
 {
     return m_attributes.find( name ) != m_attributes.end();
