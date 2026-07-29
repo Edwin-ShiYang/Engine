@@ -206,6 +206,15 @@
     <Filter Include="Core\AbilitySystem">
       <UniqueIdentifier>{48733b24-bc39-47a6-84c0-44e77c6e2366}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\AbilitySystem\GameplayEffect">
+      <UniqueIdentifier>{5f70d4cf-1ea3-437d-93e8-76a32ecf340a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\AbilitySystem\AbilitySystemComponent">
+      <UniqueIdentifier>{a2b31fff-1689-44dc-8649-3a2cb60020db}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\AbilitySystem\AttributeSet">
+      <UniqueIdentifier>{d4780ab9-6c7d-4747-9e76-f76b70d67070}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer\Renderer.cpp">
@@ -442,14 +451,26 @@
     <ClCompile Include="ParticalEmitter.cpp">
       <Filter>Renderer\ParticalEmitter</Filter>
     </ClCompile>
-    <ClCompile Include="AbilitySystemComponent.cpp">
-      <Filter>Core\AbilitySystem</Filter>
-    </ClCompile>
-    <ClCompile Include="AttributeSet.cpp">
-      <Filter>Core\AbilitySystem</Filter>
-    </ClCompile>
     <ClCompile Include="..\ThirdParty\imGUI\ImGuizmo.cpp">
       <Filter>Renderer\ImGUISystem</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystem\GameplayEffect.cpp">
+      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystem\GameplayEffectDefinition.cpp">
+      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystem\AbilitySystem.cpp">
+      <Filter>Core\AbilitySystem</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystem\AbilitySystemComponent.cpp">
+      <Filter>Core\AbilitySystem\AbilitySystemComponent</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystem\AttributeSet.cpp">
+      <Filter>Core\AbilitySystem\AttributeSet</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystem\GameplayModifierDefinition.cpp">
+      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -708,14 +729,26 @@
     <ClInclude Include="ParticalEmitter.hpp">
       <Filter>Renderer\ParticalEmitter</Filter>
     </ClInclude>
-    <ClInclude Include="AbilitySystemComponent.hpp">
-      <Filter>Core\AbilitySystem</Filter>
-    </ClInclude>
-    <ClInclude Include="AttributeSet.hpp">
-      <Filter>Core\AbilitySystem</Filter>
-    </ClInclude>
     <ClInclude Include="..\ThirdParty\imGUI\ImGuizmo.h">
       <Filter>Renderer\ImGUISystem</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystem\GameplayEffect.hpp">
+      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystem\GameplayEffectDefinition.hpp">
+      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystem\AbilitySystem.hpp">
+      <Filter>Core\AbilitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystem\AbilitySystemComponent.hpp">
+      <Filter>Core\AbilitySystem\AbilitySystemComponent</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystem\AttributeSet.hpp">
+      <Filter>Core\AbilitySystem\AttributeSet</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystem\GameplayModifierDefinition.hpp">
+      <Filter>Core\AbilitySystem\GameplayEffect</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

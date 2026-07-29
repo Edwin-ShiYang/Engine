@@ -1,5 +1,5 @@
-#include "Engine/AbilitySystemComponent.hpp"
-#include "Engine/AttributeSet.hpp"
+#include "Engine/AbilitySystem/AbilitySystemComponent.hpp"
+#include "Engine/AbilitySystem/AttributeSet.hpp"
 
 //-----------------------------------------------------------------------------------------------
 AbilitySystemComponent::AbilitySystemComponent()

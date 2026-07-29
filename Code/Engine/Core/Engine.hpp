@@ -9,6 +9,7 @@
 #include "Engine/Renderer/DearImGUISystem.hpp"
 #include "Engine/Renderer/Renderer.hpp"
 #include "Engine/Window/Window.hpp"
+#include "Engine/AbilitySystem/AbilitySystem.hpp"
 
 //-----------------------------------------------------------------------------------------------
 class Engine;
@@ -33,6 +34,7 @@ struct EngineConfig
     EventSystemConfig     m_eventSystemConfig;
     DearImGUISystemConfig m_dearImGUISystemConfig;
     NetworkConfig         m_networkConfig;
+    AbilitySystemConfig   m_abilitySystemConfig;
 };
 
 //-----------------------------------------------------------------------------------------------
@@ -48,14 +50,15 @@ public:
     void Shutdown();
 
 public:
-    Window*          m_window      = nullptr;
-    Renderer*        m_render      = nullptr;
-    InputSystem*     m_input       = nullptr;
-    DevConsole*      m_devConsole  = nullptr;
-    AudioSystem*     m_audio       = nullptr;
-    EventSystem*     m_eventSystem = nullptr;
-    DearImGUISystem* m_imgui       = nullptr;
-    NetworkSystem*   m_network     = nullptr;
+    Window*          m_window        = nullptr;
+    Renderer*        m_render        = nullptr;
+    InputSystem*     m_input         = nullptr;
+    DevConsole*      m_devConsole    = nullptr;
+    AudioSystem*     m_audio         = nullptr;
+    EventSystem*     m_eventSystem   = nullptr;
+    DearImGUISystem* m_imgui         = nullptr;
+    NetworkSystem*   m_network       = nullptr;
+    AbilitySystem*   m_abilitySystem = nullptr;
 
     EngineConfig     m_config;
 };

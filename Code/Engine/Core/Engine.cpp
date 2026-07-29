@@ -28,27 +28,21 @@ Engine::Engine( EngineConfig const& config )
     if ( config.m_devConsoleConfig.m_isEnabled ) m_devConsole = new DevConsole( config.m_devConsoleConfig );
     if ( config.m_audioConfig.m_isEnabled ) m_audio = new AudioSystem( config.m_audioConfig );
     if ( config.m_networkConfig.m_isEnabled ) m_network = new NetworkSystem( config.m_networkConfig );
+    if ( config.m_abilitySystemConfig.m_isEnabled ) m_abilitySystem = new AbilitySystem( config.m_abilitySystemConfig );
 }
 
 //-----------------------------------------------------------------------------------------------
 void Engine::Startup()
 {
-    if ( m_eventSystem )
-        m_eventSystem->Startup();
-    if ( m_window )
-        m_window->Startup();
-    if ( m_render )
-        m_render->Startup();
-    if ( m_imgui )
-        m_imgui->Startup();
-    if ( m_devConsole )
-        m_devConsole->Startup();
-    if ( m_input )
-        m_input->Startup();
-    if ( m_audio )
-        m_audio->Startup();
-    if ( m_network )
-        m_network->Startup();
+    if ( m_eventSystem ) m_eventSystem->Startup();
+    if ( m_window ) m_window->Startup();
+    if ( m_render ) m_render->Startup();
+    if ( m_imgui ) m_imgui->Startup();
+    if ( m_devConsole ) m_devConsole->Startup();
+    if ( m_input ) m_input->Startup();
+    if ( m_audio ) m_audio->Startup();
+    if ( m_network ) m_network->Startup();
+    if ( m_abilitySystem ) m_abilitySystem->Startup();
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -62,6 +56,7 @@ Engine::~Engine()
     if ( m_window ) m_window->Shutdown();
     if ( m_eventSystem ) m_eventSystem->Shutdown();
     if ( m_network ) m_network->Shutdown();
+    if ( m_abilitySystem ) m_abilitySystem->Shutdown();
 
     delete m_audio;
     m_audio = nullptr;
@@ -86,6 +81,9 @@ Engine::~Engine()
 
     delete m_network;
     m_network = nullptr;
+
+    delete m_abilitySystem;
+    m_abilitySystem = nullptr;
 }
 
 //-----------------------------------------------------------------------------------------------

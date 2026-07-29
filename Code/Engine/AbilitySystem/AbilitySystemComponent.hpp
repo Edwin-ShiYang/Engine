@@ -1,7 +1,7 @@
 #pragma once
 
 //-----------------------------------------------------------------------------------------------
-#include "AttributeSet.hpp"
+#include "Engine/AbilitySystem/AttributeSet.hpp"
 #include <map>
 #include <string>
 
