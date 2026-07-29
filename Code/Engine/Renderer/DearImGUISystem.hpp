@@ -27,6 +27,9 @@ public:
     void Startup();
     void ShutDown();
 
+private:
+    void SetImGuiCatppuccinMacchiatoTheme();
+
 protected:
     DearImGUISystemConfig m_config;
 };
