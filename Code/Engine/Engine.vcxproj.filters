@@ -445,7 +445,7 @@
     <ClCompile Include="AbilitySystemComponent.cpp">
       <Filter>Core\AbilitySystem</Filter>
     </ClCompile>
-    <ClCompile Include="AttributeSets.cpp">
+    <ClCompile Include="AttributeSet.cpp">
       <Filter>Core\AbilitySystem</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\imGUI\ImGuizmo.cpp">
@@ -711,7 +711,7 @@
     <ClInclude Include="AbilitySystemComponent.hpp">
       <Filter>Core\AbilitySystem</Filter>
     </ClInclude>
-    <ClInclude Include="AttributeSets.hpp">
+    <ClInclude Include="AttributeSet.hpp">
       <Filter>Core\AbilitySystem</Filter>
     </ClInclude>
     <ClInclude Include="..\ThirdParty\imGUI\ImGuizmo.h">

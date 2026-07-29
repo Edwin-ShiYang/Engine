@@ -351,7 +351,7 @@
     <ClCompile Include="AbilitySystemComponent.cpp" />
     <ClCompile Include="AnimationClip.cpp" />
     <ClCompile Include="AnimationController.cpp" />
-    <ClCompile Include="AttributeSets.cpp" />
+    <ClCompile Include="AttributeSet.cpp" />
     <ClCompile Include="Audio\AudioSystem.cpp" />
     <ClCompile Include="Core\Clock.cpp" />
     <ClCompile Include="Core\DevConsole.cpp" />
@@ -437,7 +437,7 @@
     <ClInclude Include="AbilitySystemComponent.hpp" />
     <ClInclude Include="AnimationClip.hpp" />
     <ClInclude Include="AnimationController.hpp" />
-    <ClInclude Include="AttributeSets.hpp" />
+    <ClInclude Include="AttributeSet.hpp" />
     <ClInclude Include="Audio\AudioSystem.hpp" />
     <ClInclude Include="Core\Clock.hpp" />
     <ClInclude Include="Core\DevConsole.hpp" />

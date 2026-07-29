@@ -1,13 +1,17 @@
 #pragma once
 
-class AttributeSet;
+//-----------------------------------------------------------------------------------------------
+#include "AttributeSet.hpp"
 
 //-----------------------------------------------------------------------------------------------
 class AbilitySystemComponent
 {
 public:
-    AbilitySystemComponent()  = default;
-    ~AbilitySystemComponent() = default;
+    AbilitySystemComponent();
+
+    virtual ~AbilitySystemComponent();
+
+    void SetAttributes( Attributes attributes );
 
 public:
     AttributeSet* m_attributeSet = nullptr;
