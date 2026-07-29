@@ -1,6 +1,5 @@
 #pragma once
 
-
 //-----------------------------------------------------------------------------------------------
 #include "ThirdParty/TinyXML2/tinyxml2.h"
 
@@ -15,27 +14,26 @@
 
 #include <string>
 
+//-----------------------------------------------------------------------------------------------
+typedef tinyxml2::XMLDocument  XmlDocument;
+typedef tinyxml2::XMLElement   XmlElement;
+typedef tinyxml2::XMLAttribute XmlAttribute;
+typedef tinyxml2::XMLError     XmlResult;
+
+constexpr int                  XML_SUCCESS = tinyxml2::XML_SUCCESS;
 
 //-----------------------------------------------------------------------------------------------
-typedef tinyxml2::XMLDocument   XmlDocument;
-typedef tinyxml2::XMLElement    XmlElement;
-typedef tinyxml2::XMLAttribute  XmlAttribute;
-typedef tinyxml2::XMLError      XmlResult;
-
-constexpr int XML_SUCCESS = tinyxml2::XML_SUCCESS;
-
-//-----------------------------------------------------------------------------------------------
-int         ParseXmlAttribute( XmlElement const& element, char const* attributeName, int                 defaultValue );
-char        ParseXmlAttribute( XmlElement const& element, char const* attributeName, char                defaultValue );
-bool        ParseXmlAttribute( XmlElement const& element, char const* attributeName, bool                defaultValue );
-float       ParseXmlAttribute( XmlElement const& element, char const* attributeName, float               defaultValue );
-Rgba8       ParseXmlAttribute( XmlElement const& element, char const* attributeName, Rgba8        const& defaultValue );
-Vec2        ParseXmlAttribute( XmlElement const& element, char const* attributeName, Vec2         const& defaultValue );
-IntVec2     ParseXmlAttribute( XmlElement const& element, char const* attributeName, IntVec2      const& defaultValue );
-Vec3        ParseXmlAttribute( XmlElement const& element, char const* attributeName, Vec3         const& defaultValue );
-EulerAngles ParseXmlAttribute( XmlElement const& element, char const* attributeName, EulerAngles  const& defaultValue );
-FloatRange  ParseXmlAttribute( XmlElement const& element, char const* attributeName, FloatRange   const& defaultValue, char delimiter = ',' );
-AABB2       ParseXmlAttribute( XmlElement const& element, char const* attributeName, AABB2        const& defaultValue );
-std::string ParseXmlAttribute( XmlElement const& element, char const* attributeName, char         const* defaultValue );
-std::string ParseXmlAttribute( XmlElement const& element, char const* attributeName, std::string  const& defaultValue );
-Strings     ParseXmlAttribute( XmlElement const& element, char const* attributeName, Strings      const& defaultValues, char delimiter = ',' );
+int                            ParseXmlAttribute( XmlElement const& element, char const* attributeName, int defaultValue );
+char                           ParseXmlAttribute( XmlElement const& element, char const* attributeName, char defaultValue );
+bool                           ParseXmlAttribute( XmlElement const& element, char const* attributeName, bool defaultValue );
+float                          ParseXmlAttribute( XmlElement const& element, char const* attributeName, float defaultValue );
+Rgba8                          ParseXmlAttribute( XmlElement const& element, char const* attributeName, Rgba8 const& defaultValue );
+Vec2                           ParseXmlAttribute( XmlElement const& element, char const* attributeName, Vec2 const& defaultValue );
+IntVec2                        ParseXmlAttribute( XmlElement const& element, char const* attributeName, IntVec2 const& defaultValue );
+Vec3                           ParseXmlAttribute( XmlElement const& element, char const* attributeName, Vec3 const& defaultValue );
+EulerAngles                    ParseXmlAttribute( XmlElement const& element, char const* attributeName, EulerAngles const& defaultValue );
+FloatRange                     ParseXmlAttribute( XmlElement const& element, char const* attributeName, FloatRange const& defaultValue, char delimiter = ',' );
+AABB2                          ParseXmlAttribute( XmlElement const& element, char const* attributeName, AABB2 const& defaultValue );
+std::string                    ParseXmlAttribute( XmlElement const& element, char const* attributeName, char const* defaultValue );
+std::string                    ParseXmlAttribute( XmlElement const& element, char const* attributeName, std::string const& defaultValue );
+Strings                        ParseXmlAttribute( XmlElement const& element, char const* attributeName, Strings const& defaultValues, char delimiter = ',' );

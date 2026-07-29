@@ -49,5 +49,5 @@ public:
 private:
     std::vector< Particle > m_particles;
     float                   m_spawnTimer    = 0.f;
-    float                   m_spawnInterval = 0.02f;
+    float                   m_spawnInterval = 0.01f;
 };

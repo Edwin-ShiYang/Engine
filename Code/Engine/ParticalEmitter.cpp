@@ -20,8 +20,8 @@ void ParticleEmitter::Spawn()
     Particle p;
     p.m_position = m_position;
 
-    float       pitch = s_rng.MakeRandomFloatInRange( -15.f, 15.f );
-    float       yaw   = s_rng.MakeRandomFloatInRange( -15.f, 15.f );
+    float       pitch = s_rng.MakeRandomFloatInRange( -180.f, 180.f );
+    float       yaw   = s_rng.MakeRandomFloatInRange( -180.f, 180.f );
 
     EulerAngles orientation = EulerAngles( yaw, pitch, 0.f );
     p.m_velocity            = orientation.GetForwardDir_IFwd_JLeft_KUp().GetNormalized();

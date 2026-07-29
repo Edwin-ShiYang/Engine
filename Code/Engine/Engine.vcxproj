@@ -332,15 +332,26 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="..\ThirdParty\imGUI\imgui.cpp" />
-    <ClCompile Include="..\ThirdParty\imGUI\ImGuizmo.cpp" />
+    <ClCompile Include="..\ThirdParty\imGUI\ImGuizmo.cpp">
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">4245</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='FastBreak|Win32'">4245</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='DebugInline|Win32'">4245</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">4245</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">4245</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='FastBreak|x64'">4245</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='DebugInline|x64'">4245</DisableSpecificWarnings>
+      <DisableSpecificWarnings Condition="'$(Configuration)|$(Platform)'=='Release|x64'">4245</DisableSpecificWarnings>
+    </ClCompile>
     <ClCompile Include="..\ThirdParty\imGUI\imgui_draw.cpp" />
     <ClCompile Include="..\ThirdParty\imGUI\imgui_impl_dx11.cpp" />
     <ClCompile Include="..\ThirdParty\imGUI\imgui_impl_win32.cpp" />
     <ClCompile Include="..\ThirdParty\imGUI\imgui_tables.cpp" />
     <ClCompile Include="..\ThirdParty\imGUI\imgui_widgets.cpp" />
     <ClCompile Include="..\ThirdParty\TinyXML2\tinyxml2.cpp" />
+    <ClCompile Include="AbilitySystemComponent.cpp" />
     <ClCompile Include="AnimationClip.cpp" />
     <ClCompile Include="AnimationController.cpp" />
+    <ClCompile Include="AttributeSets.cpp" />
     <ClCompile Include="Audio\AudioSystem.cpp" />
     <ClCompile Include="Core\Clock.cpp" />
     <ClCompile Include="Core\DevConsole.cpp" />
@@ -423,8 +434,10 @@
     <ClInclude Include="..\ThirdParty\imGUI\ImGuizmo.h" />
     <ClInclude Include="..\ThirdParty\stb\stb_image.h" />
     <ClInclude Include="..\ThirdParty\TinyXML2\tinyxml2.h" />
+    <ClInclude Include="AbilitySystemComponent.hpp" />
     <ClInclude Include="AnimationClip.hpp" />
     <ClInclude Include="AnimationController.hpp" />
+    <ClInclude Include="AttributeSets.hpp" />
     <ClInclude Include="Audio\AudioSystem.hpp" />
     <ClInclude Include="Core\Clock.hpp" />
     <ClInclude Include="Core\DevConsole.hpp" />

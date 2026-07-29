@@ -1,6 +1,5 @@
 #include "Engine/Core/XmlUtils.hpp"
 
-
 //-----------------------------------------------------------------------------------------------
 int ParseXmlAttribute( XmlElement const& element, char const* attributeName, int defaultValue )
 {
@@ -10,23 +9,21 @@ int ParseXmlAttribute( XmlElement const& element, char const* attributeName, int
     return ( xmlResult == XML_SUCCESS ) ? result : defaultValue;
 }
 
-
 //-----------------------------------------------------------------------------------------------
 char ParseXmlAttribute( XmlElement const& element, char const* attributeName, char defaultValue )
 {
     char const* strValue = nullptr;
 
-    if( element.QueryStringAttribute( attributeName, &strValue ) == XML_SUCCESS && strValue != nullptr )
+    if ( element.QueryStringAttribute( attributeName, &strValue ) == XML_SUCCESS && strValue != nullptr )
     {
-        if( strValue [ 0 ] != '\0' )
+        if ( strValue[ 0 ] != '\0' )
         {
-            return strValue [ 0 ];
+            return strValue[ 0 ];
         }
     }
 
     return defaultValue;
 }
-
 
 //-----------------------------------------------------------------------------------------------
 float ParseXmlAttribute( XmlElement const& element, char const* attributeName, float defaultValue )
@@ -37,7 +34,6 @@ float ParseXmlAttribute( XmlElement const& element, char const* attributeName, f
     return ( xmlResult == XML_SUCCESS ) ? result : defaultValue;
 }
 
-
 //-----------------------------------------------------------------------------------------------
 bool ParseXmlAttribute( XmlElement const& element, char const* attributeName, bool defaultValue )
 {
@@ -47,21 +43,19 @@ bool ParseXmlAttribute( XmlElement const& element, char const* attributeName, bo
     return ( xmlResult == XML_SUCCESS ) ? result : defaultValue;
 }
 
-
 //-----------------------------------------------------------------------------------------------
 Rgba8 ParseXmlAttribute( XmlElement const& element, char const* attributeName, Rgba8 const& defaultValue )
 {
     Rgba8       result    = defaultValue;
     char const* value     = nullptr;
     XmlResult   xmlResult = element.QueryStringAttribute( attributeName, &value );
-    if( xmlResult == XML_SUCCESS )
+    if ( xmlResult == XML_SUCCESS )
     {
         result.SetFromText( value );
     }
 
     return result;
 }
-
 
 //-----------------------------------------------------------------------------------------------
 Vec2 ParseXmlAttribute( XmlElement const& element, char const* attributeName, Vec2 const& defaultValue )
@@ -69,13 +63,12 @@ Vec2 ParseXmlAttribute( XmlElement const& element, char const* attributeName, Ve
     Vec2        result    = defaultValue;
     char const* value     = nullptr;
     XmlResult   xmlResult = element.QueryStringAttribute( attributeName, &value );
-    if( xmlResult == XML_SUCCESS )
+    if ( xmlResult == XML_SUCCESS )
     {
         result.SetFromText( value );
     }
     return result;
 }
-
 
 //-----------------------------------------------------------------------------------------------
 IntVec2 ParseXmlAttribute( XmlElement const& element, char const* attributeName, IntVec2 const& defaultValue )
@@ -83,14 +76,13 @@ IntVec2 ParseXmlAttribute( XmlElement const& element, char const* attributeName,
     IntVec2     result    = defaultValue;
     char const* value     = nullptr;
     XmlResult   xmlResult = element.QueryStringAttribute( attributeName, &value );
-    if( xmlResult == XML_SUCCESS )
+    if ( xmlResult == XML_SUCCESS )
     {
         result.SetFromText( value );
     }
 
     return result;
 }
-
 
 //-----------------------------------------------------------------------------------------------
 Vec3 ParseXmlAttribute( XmlElement const& element, char const* attributeName, Vec3 const& defaultValue )
@@ -98,13 +90,12 @@ Vec3 ParseXmlAttribute( XmlElement const& element, char const* attributeName, Ve
     Vec3        result    = defaultValue;
     char const* value     = nullptr;
     XmlResult   xmlResult = element.QueryStringAttribute( attributeName, &value );
-    if( xmlResult == XML_SUCCESS )
+    if ( xmlResult == XML_SUCCESS )
     {
         result.SetFromText( value );
     }
     return result;
 }
-
 
 //-----------------------------------------------------------------------------------------------
 EulerAngles ParseXmlAttribute( XmlElement const& element, char const* attributeName, EulerAngles const& defaultValue )
@@ -112,13 +103,12 @@ EulerAngles ParseXmlAttribute( XmlElement const& element, char const* attributeN
     EulerAngles result    = defaultValue;
     char const* value     = nullptr;
     XmlResult   xmlResult = element.QueryStringAttribute( attributeName, &value );
-    if( xmlResult == XML_SUCCESS )
+    if ( xmlResult == XML_SUCCESS )
     {
         result.SetFromText( value );
     }
     return result;
 }
-
 
 //-----------------------------------------------------------------------------------------------
 FloatRange ParseXmlAttribute( XmlElement const& element, char const* attributeName, FloatRange const& defaultValue, char delimiter )
@@ -126,7 +116,7 @@ FloatRange ParseXmlAttribute( XmlElement const& element, char const* attributeNa
     FloatRange  result    = defaultValue;
     char const* value     = nullptr;
     XmlResult   xmlResult = element.QueryStringAttribute( attributeName, &value );
-    if( xmlResult == XML_SUCCESS )
+    if ( xmlResult == XML_SUCCESS )
     {
         result.SetFromText( value, delimiter );
     }
@@ -139,7 +129,7 @@ AABB2 ParseXmlAttribute( XmlElement const& element, char const* attributeName, A
     AABB2       result    = defaultValue;
     char const* value     = nullptr;
     XmlResult   xmlResult = element.QueryStringAttribute( attributeName, &value );
-    if( xmlResult == XML_SUCCESS )
+    if ( xmlResult == XML_SUCCESS )
     {
         result.SetFromText( value );
     }
@@ -147,14 +137,13 @@ AABB2 ParseXmlAttribute( XmlElement const& element, char const* attributeName, A
     return result;
 }
 
-
 //-----------------------------------------------------------------------------------------------
 std::string ParseXmlAttribute( XmlElement const& element, char const* attributeName, char const* defaultValue )
 {
     char const* value  = nullptr;
     XmlResult   result = element.QueryStringAttribute( attributeName, &value );
 
-    if( result == XML_SUCCESS )
+    if ( result == XML_SUCCESS )
     {
         return value;
     }
@@ -162,14 +151,13 @@ std::string ParseXmlAttribute( XmlElement const& element, char const* attributeN
     return defaultValue;
 }
 
-
 //-----------------------------------------------------------------------------------------------
 std::string ParseXmlAttribute( XmlElement const& element, char const* attributeName, std::string const& defaultValue )
 {
     char const* value  = nullptr;
     XmlResult   result = element.QueryStringAttribute( attributeName, &value );
 
-    if( result == XML_SUCCESS )
+    if ( result == XML_SUCCESS )
     {
         return std::string( value );
     }
@@ -177,14 +165,13 @@ std::string ParseXmlAttribute( XmlElement const& element, char const* attributeN
     return defaultValue;
 }
 
-
 //-----------------------------------------------------------------------------------------------
 Strings ParseXmlAttribute( XmlElement const& element, char const* attributeName, Strings const& defaultValues, char delimiter /*= ',' */ )
 {
     Strings     results   = defaultValues;
     char const* value     = nullptr;
     XmlResult   xmlResult = element.QueryStringAttribute( attributeName, &value );
-    if( xmlResult == XML_SUCCESS )
+    if ( xmlResult == XML_SUCCESS )
     {
         results = SplitStringOnDelimiter( value, delimiter );
     }

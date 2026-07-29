@@ -203,6 +203,9 @@
     <Filter Include="Renderer\ParticalEmitter">
       <UniqueIdentifier>{6d986f5f-f8af-4ad9-97ac-6bb917c73ff9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\AbilitySystem">
+      <UniqueIdentifier>{48733b24-bc39-47a6-84c0-44e77c6e2366}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer\Renderer.cpp">
@@ -438,6 +441,12 @@
     </ClCompile>
     <ClCompile Include="ParticalEmitter.cpp">
       <Filter>Renderer\ParticalEmitter</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystemComponent.cpp">
+      <Filter>Core\AbilitySystem</Filter>
+    </ClCompile>
+    <ClCompile Include="AttributeSets.cpp">
+      <Filter>Core\AbilitySystem</Filter>
     </ClCompile>
     <ClCompile Include="..\ThirdParty\imGUI\ImGuizmo.cpp">
       <Filter>Renderer\ImGUISystem</Filter>
@@ -698,6 +707,12 @@
     </ClInclude>
     <ClInclude Include="ParticalEmitter.hpp">
       <Filter>Renderer\ParticalEmitter</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystemComponent.hpp">
+      <Filter>Core\AbilitySystem</Filter>
+    </ClInclude>
+    <ClInclude Include="AttributeSets.hpp">
+      <Filter>Core\AbilitySystem</Filter>
     </ClInclude>
     <ClInclude Include="..\ThirdParty\imGUI\ImGuizmo.h">
       <Filter>Renderer\ImGUISystem</Filter>
