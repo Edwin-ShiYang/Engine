@@ -9,6 +9,7 @@
 //-----------------------------------------------------------------------------------------------
 enum class GameplayModifierOperation
 {
+    Unknown = -1,
     Add,
     Multiply,
     Divide,
@@ -22,6 +23,7 @@ public:
     GameplayModifierDefinition()  = default;
     ~GameplayModifierDefinition() = default;
 
+    char const*               GetOperationString();
     void                      LoadFromXmlElement( XmlElement const& element );
     GameplayModifierOperation ParseGameplayModifierOperation( std::string operation );
 

@@ -9,8 +9,9 @@
 #include "GameplayModifierDefinition.hpp"
 
 //-----------------------------------------------------------------------------------------------
-enum class GameplayEffectDurationType
+enum class GameplayEffectDurationPolicy
 {
+    Unknown = -1,
     Instant,
     Infinite,
     HasDuration
@@ -23,15 +24,17 @@ public:
     GameplayEffectDefinition()  = default;
     ~GameplayEffectDefinition() = default;
 
-    void                                            LoadFromXmlElement( XmlElement const& element );
-    GameplayEffectDurationType                      ParseDurationPolicy( std::string durationPolicy );
+    void                         LoadFromXmlElement( XmlElement const& element );
+    GameplayEffectDurationPolicy ParseDurationPolicy( std::string durationPolicy );
+    char const*                  GetDurationPolicyString() const;
 
-    static void                                     InitializeDefinitions( std::string const& definitionFilePath );
+    static void
+                                                    InitializeDefinitions( std::string const& definitionFilePath );
     static void                                     ClearDefinitions();
     static std::vector< GameplayEffectDefinition* > s_definitions;
 
     std::string                                     m_name;
-    GameplayEffectDurationType                      m_durationPolicy  = GameplayEffectDurationType::Instant;
+    GameplayEffectDurationPolicy                    m_durationPolicy  = GameplayEffectDurationPolicy::Instant;
     float                                           m_durationSeconds = 0.f;
     float                                           m_periodSeconds   = 0.f;
     std::vector< GameplayModifierDefinition* >      m_modifiers;

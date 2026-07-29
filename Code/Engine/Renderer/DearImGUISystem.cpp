@@ -42,6 +42,7 @@ void DearImGUISystem::Startup()
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;
     //io.IniFilename = nullptr;
 
     io.Fonts->AddFontFromFileTTF( m_config.m_fontPath.c_str(), m_config.m_fontSize );

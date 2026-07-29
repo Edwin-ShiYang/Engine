@@ -64,13 +64,25 @@ void GameplayEffectDefinition::ClearDefinitions()
 }
 
 //-----------------------------------------------------------------------------------------------
-GameplayEffectDurationType GameplayEffectDefinition::ParseDurationPolicy( std::string durationPolicy )
+GameplayEffectDurationPolicy GameplayEffectDefinition::ParseDurationPolicy( std::string durationPolicy )
 {
-    if ( durationPolicy == "Instant" ) return GameplayEffectDurationType::Instant;
-    if ( durationPolicy == "Infinite" ) return GameplayEffectDurationType::Infinite;
-    if ( durationPolicy == "HasDuration" ) return GameplayEffectDurationType::HasDuration;
+    if ( durationPolicy == "Instant" ) return GameplayEffectDurationPolicy::Instant;
+    if ( durationPolicy == "Infinite" ) return GameplayEffectDurationPolicy::Infinite;
+    if ( durationPolicy == "HasDuration" ) return GameplayEffectDurationPolicy::HasDuration;
 
     ERROR_AND_DIE( Stringf( "Invalid durationPolicy: %s", durationPolicy.c_str() ) );
+}
+
+//-----------------------------------------------------------------------------------------------
+char const* GameplayEffectDefinition::GetDurationPolicyString() const
+{
+    switch ( m_durationPolicy )
+    {
+        case GameplayEffectDurationPolicy::Instant: return "Instant";
+        case GameplayEffectDurationPolicy::Infinite: return "Infinite";
+        case GameplayEffectDurationPolicy::HasDuration: return "HasDuration";
+    }
+    return "Unknown";
 }
 
 //-----------------------------------------------------------------------------------------------

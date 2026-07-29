@@ -24,3 +24,16 @@ GameplayModifierOperation GameplayModifierDefinition::ParseGameplayModifierOpera
 
     ERROR_AND_DIE( Stringf( "Invalid Operation: %s", operation.c_str() ) );
 }
+
+//-----------------------------------------------------------------------------------------------
+char const* GameplayModifierDefinition::GetOperationString()
+{
+    switch ( m_operation )
+    {
+        case GameplayModifierOperation::Add: return "Add";
+        case GameplayModifierOperation::Multiply: return "Multiply";
+        case GameplayModifierOperation::Divide: return "Divide";
+        case GameplayModifierOperation::Override: return "Override";
+    }
+    return "Unknown";
+}
