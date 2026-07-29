@@ -3,13 +3,15 @@
 //-----------------------------------------------------------------------------------------------
 void AttributeSet::SetAttribute( std::string const& name, float value )
 {
-    m_attributes[ name ] = value;
+    // m_attributes[ name ] = value;
 }
 
 //-----------------------------------------------------------------------------------------------
 float AttributeSet::GetAttribute( std::string const& name ) const
 {
-    return m_attributes.at( name );
+    // return m_attributes.at( name );
+
+    return 0.f;
 }
 
 //-----------------------------------------------------------------------------------------------

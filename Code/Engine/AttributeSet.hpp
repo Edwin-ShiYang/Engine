@@ -4,7 +4,15 @@
 #include <map>
 #include <string>
 
-using Attributes = std::map< std::string, float >;
+//-----------------------------------------------------------------------------------------------
+struct AttributeData
+{
+    float m_baseValue    = 0.f;
+    float m_currentValue = 0.f;
+};
+
+//-----------------------------------------------------------------------------------------------
+using Attributes = std::map< std::string, AttributeData >;
 
 //-----------------------------------------------------------------------------------------------
 class AttributeSet

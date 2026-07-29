@@ -2,6 +2,8 @@
 
 //-----------------------------------------------------------------------------------------------
 #include "AttributeSet.hpp"
+#include <map>
+#include <string>
 
 //-----------------------------------------------------------------------------------------------
 class AbilitySystemComponent
@@ -11,7 +13,7 @@ public:
 
     virtual ~AbilitySystemComponent();
 
-    void InitializeAttributes( Attributes const& attributes );
+    void InitializeAttributes( std::map< std::string, float > attributes );
 
 public:
     AttributeSet* m_attributeSet = nullptr;

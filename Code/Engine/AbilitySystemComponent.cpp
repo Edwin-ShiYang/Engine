@@ -15,7 +15,13 @@ AbilitySystemComponent::~AbilitySystemComponent()
 }
 
 //-----------------------------------------------------------------------------------------------
-void AbilitySystemComponent::InitializeAttributes( Attributes const& attributes )
+void AbilitySystemComponent::InitializeAttributes( std::map< std::string, float > attributes )
 {
-    m_attributeSet->m_attributes = attributes;
+    for ( auto const& [ key, value ] : attributes )
+    {
+        AttributeData attributeData;
+        attributeData.m_baseValue           = value;
+        attributeData.m_currentValue        = attributeData.m_baseValue;
+        m_attributeSet->m_attributes[ key ] = attributeData;
+    }
 }
