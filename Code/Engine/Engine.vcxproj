@@ -356,8 +356,8 @@
     <ClCompile Include="AbilitySystem\GameplayEffect.cpp" />
     <ClCompile Include="AbilitySystem\GameplayEffectDefinition.cpp" />
     <ClCompile Include="AbilitySystem\GameplayModifierDefinition.cpp" />
-    <ClCompile Include="AnimationClip.cpp" />
-    <ClCompile Include="AnimationController.cpp" />
+    <ClCompile Include="Animation\AnimationClip.cpp" />
+    <ClCompile Include="Animation\AnimationController.cpp" />
     <ClCompile Include="Audio\AudioSystem.cpp" />
     <ClCompile Include="Core\Clock.cpp" />
     <ClCompile Include="Core\DevConsole.cpp" />
@@ -407,7 +407,7 @@
     <ClCompile Include="Model\StaticMesh.cpp" />
     <ClCompile Include="Model\StaticMeshSection.cpp" />
     <ClCompile Include="Network\NetworkSystem.cpp" />
-    <ClCompile Include="ParticalEmitter.cpp" />
+    <ClCompile Include="ParticleSystem\ParticleEmitter.cpp" />
     <ClCompile Include="Renderer\BitmapFont.cpp" />
     <ClCompile Include="Renderer\Camera.cpp" />
     <ClCompile Include="Renderer\ConstantBuffer.cpp" />
@@ -448,8 +448,8 @@
     <ClInclude Include="AbilitySystem\GameplayEffect.hpp" />
     <ClInclude Include="AbilitySystem\GameplayEffectDefinition.hpp" />
     <ClInclude Include="AbilitySystem\GameplayModifierDefinition.hpp" />
-    <ClInclude Include="AnimationClip.hpp" />
-    <ClInclude Include="AnimationController.hpp" />
+    <ClInclude Include="Animation\AnimationClip.hpp" />
+    <ClInclude Include="Animation\AnimationController.hpp" />
     <ClInclude Include="Audio\AudioSystem.hpp" />
     <ClInclude Include="Core\Clock.hpp" />
     <ClInclude Include="Core\DevConsole.hpp" />
@@ -500,14 +500,14 @@
     <ClInclude Include="Model\StaticMesh.hpp" />
     <ClInclude Include="Model\StaticMeshSection.hpp" />
     <ClInclude Include="Network\NetworkSystem.hpp" />
-    <ClInclude Include="ParticalEmitter.hpp" />
-    <ClInclude Include="RenderConstants.hpp" />
+    <ClInclude Include="ParticleSystem\ParticleEmitter.hpp" />
     <ClInclude Include="Renderer\BitmapFont.hpp" />
     <ClInclude Include="Renderer\Camera.hpp" />
     <ClInclude Include="Renderer\ConstantBuffer.hpp" />
     <ClInclude Include="Renderer\CubemapTexture.hpp" />
     <ClInclude Include="Renderer\DebugRenderSystem.hpp" />
     <ClInclude Include="Renderer\DepthRenderTexture.hpp" />
+    <ClInclude Include="Renderer\RenderConstants.hpp" />
     <ClInclude Include="Renderer\RendererTexture.hpp" />
     <ClInclude Include="Renderer\Shaders\DefaultShader.hpp" />
     <ClInclude Include="Renderer\DearImGUISystem.hpp" />
@@ -521,7 +521,7 @@
     <ClInclude Include="Renderer\Texture.hpp" />
     <ClInclude Include="Renderer\TextureBase.hpp" />
     <ClInclude Include="Renderer\VertexBuffer.hpp" />
-    <ClInclude Include="VertexLayout.hpp.hpp" />
+    <ClInclude Include="Renderer\VertexLayout.hpp" />
     <ClInclude Include="Window\Window.hpp" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

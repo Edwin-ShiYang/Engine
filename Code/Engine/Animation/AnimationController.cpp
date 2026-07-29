@@ -1,4 +1,4 @@
-#include "Engine/AnimationController.hpp"
+#include "Engine/Animation/AnimationController.hpp"
 #include "Engine/Core/Clock.hpp"
 
 //-----------------------------------------------------------------------------------------------

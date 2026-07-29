@@ -1,4 +1,4 @@
-#include "Engine/AnimationClip.hpp"
+#include "Engine/Animation/AnimationClip.hpp"
 #include "Engine/Math/MathUtils.hpp"
 
 //-----------------------------------------------------------------------------------------------

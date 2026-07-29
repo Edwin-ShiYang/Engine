@@ -39,7 +39,7 @@
 #include "RendererTexture.hpp"
 #include "DepthRenderTexture.hpp"
 #include "CubemapTexture.hpp"
-#include "../RenderConstants.hpp"
+#include "Engine/Renderer/RenderConstants.hpp"
 
 //-----------------------------------------------------------------------------------------------
 Texture const* g_defaultWhiteTexture            = nullptr;

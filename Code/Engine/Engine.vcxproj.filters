@@ -200,9 +200,6 @@
     <Filter Include="Core\Animation">
       <UniqueIdentifier>{032a6c4e-2a78-4990-aca6-1bbc61bc2249}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Renderer\ParticalEmitter">
-      <UniqueIdentifier>{6d986f5f-f8af-4ad9-97ac-6bb917c73ff9}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Core\AbilitySystem">
       <UniqueIdentifier>{48733b24-bc39-47a6-84c0-44e77c6e2366}</UniqueIdentifier>
     </Filter>
@@ -226,6 +223,9 @@
     </Filter>
     <Filter Include="Core\AbilitySystem\GameplayModifierDefinition">
       <UniqueIdentifier>{4d48a940-0dbc-41df-9f3f-a573d53c0bab}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Core\ParticleSystem">
+      <UniqueIdentifier>{6d986f5f-f8af-4ad9-97ac-6bb917c73ff9}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -454,15 +454,6 @@
     <ClCompile Include="Model\StaticMeshSection.cpp">
       <Filter>Core\Model</Filter>
     </ClCompile>
-    <ClCompile Include="AnimationClip.cpp">
-      <Filter>Core\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="AnimationController.cpp">
-      <Filter>Core\Animation</Filter>
-    </ClCompile>
-    <ClCompile Include="ParticalEmitter.cpp">
-      <Filter>Renderer\ParticalEmitter</Filter>
-    </ClCompile>
     <ClCompile Include="..\ThirdParty\imGUI\ImGuizmo.cpp">
       <Filter>Renderer\ImGUISystem</Filter>
     </ClCompile>
@@ -489,6 +480,15 @@
     </ClCompile>
     <ClCompile Include="AbilitySystem\GameplayModifierDefinition.cpp">
       <Filter>Core\AbilitySystem\GameplayModifierDefinition</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationClip.cpp">
+      <Filter>Core\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="Animation\AnimationController.cpp">
+      <Filter>Core\Animation</Filter>
+    </ClCompile>
+    <ClCompile Include="ParticleSystem\ParticleEmitter.cpp">
+      <Filter>Core\ParticleSystem</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -732,21 +732,6 @@
     <ClInclude Include="Model\StaticMeshSection.hpp">
       <Filter>Core\Model</Filter>
     </ClInclude>
-    <ClInclude Include="AnimationClip.hpp">
-      <Filter>Core\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="AnimationController.hpp">
-      <Filter>Core\Animation</Filter>
-    </ClInclude>
-    <ClInclude Include="RenderConstants.hpp">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="VertexLayout.hpp.hpp">
-      <Filter>Renderer</Filter>
-    </ClInclude>
-    <ClInclude Include="ParticalEmitter.hpp">
-      <Filter>Renderer\ParticalEmitter</Filter>
-    </ClInclude>
     <ClInclude Include="..\ThirdParty\imGUI\ImGuizmo.h">
       <Filter>Renderer\ImGUISystem</Filter>
     </ClInclude>
@@ -773,6 +758,21 @@
     </ClInclude>
     <ClInclude Include="AbilitySystem\GameplayModifierDefinition.hpp">
       <Filter>Core\AbilitySystem\GameplayModifierDefinition</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationClip.hpp">
+      <Filter>Core\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="Animation\AnimationController.hpp">
+      <Filter>Core\Animation</Filter>
+    </ClInclude>
+    <ClInclude Include="ParticleSystem\ParticleEmitter.hpp">
+      <Filter>Core\ParticleSystem</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\VertexLayout.hpp">
+      <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="Renderer\RenderConstants.hpp">
+      <Filter>Renderer</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

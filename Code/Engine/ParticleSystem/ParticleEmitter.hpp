@@ -6,7 +6,7 @@
 #include "Engine/Core/Rgba8.hpp"
 #include "Engine/Math/EulerAngles.hpp"
 #include "Engine/Math/Mat44.hpp"
-#include "Math/RandomNumberGenerator.hpp"
+#include "Engine/Math/RandomNumberGenerator.hpp"
 
 //----------------------------------------------------------------------------------------------
 #include <vector>

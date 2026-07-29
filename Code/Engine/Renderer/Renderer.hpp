@@ -3,6 +3,7 @@
 //----------------------------------------------------------------------------------------------
 #include "Engine/Math/Mat44.hpp"
 #include "Engine/Math/Vec3.hpp"
+#include "Engine/Renderer/VertexLayout.hpp"
 #include "Engine/Renderer/BitmapFont.hpp"
 #include "Engine/Renderer/Texture.hpp"
 #include "Game/EngineBuildPreferences.hpp"
@@ -11,7 +12,6 @@
 #include <map>
 #include <vector>
 #include <array>
-#include "../VertexLayout.hpp.hpp"
 
 //----------------------------------------------------------------------------------------------
 struct ID3D11Device;

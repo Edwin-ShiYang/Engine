@@ -1,10 +1,11 @@
-#include "Engine/ParticalEmitter.hpp"
-#include "Core/Vertex.hpp"
-#include "Core/VertexUtils.hpp"
-#include "Math/AABB3.hpp"
-#include "Core/Engine.hpp"
-#include "Core/Clock.hpp"
-#include "Math/MathUtils.hpp"
+#include "Engine/ParticleSystem/ParticleEmitter.hpp"
+
+#include "Engine/Core/Vertex.hpp"
+#include "Engine/Core/VertexUtils.hpp"
+#include "Engine/Math/AABB3.hpp"
+#include "Engine/Core/Engine.hpp"
+#include "Engine/Core/Clock.hpp"
+#include "Engine/Math/MathUtils.hpp"
 
 static RandomNumberGenerator s_rng;
 

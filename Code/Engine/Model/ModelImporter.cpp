@@ -4,11 +4,11 @@
 #include "Engine/Core/Image.hpp"
 #include "Engine/Core/StringUtils.hpp"
 #include "Engine/Math/Vec4.hpp"
+#include "Engine/Core/VertexUtils.hpp "
+#include "Engine/Animation/AnimationClip.hpp"
 
 //-----------------------------------------------------------------------------------------------
 #pragma comment( lib, "assimp-vc143-mt.lib" )
-#include "../Core/VertexUtils.hpp"
-#include "../AnimationClip.hpp"
 #include "ThirdParty/assimp/Importer.hpp"
 #include "ThirdParty/assimp/postprocess.h"
 #include "ThirdParty/assimp/scene.h"
