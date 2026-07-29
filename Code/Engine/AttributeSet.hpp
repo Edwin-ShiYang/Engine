@@ -4,7 +4,7 @@
 #include <map>
 #include <string>
 
-typedef std::map< std::string, float > Attributes;
+using Attributes = std::map< std::string, float >;
 
 //-----------------------------------------------------------------------------------------------
 class AttributeSet

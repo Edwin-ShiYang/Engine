@@ -11,7 +11,7 @@ public:
 
     virtual ~AbilitySystemComponent();
 
-    void SetAttributes( Attributes attributes );
+    void InitializeAttributes( Attributes const& attributes );
 
 public:
     AttributeSet* m_attributeSet = nullptr;

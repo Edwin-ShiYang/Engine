@@ -15,7 +15,7 @@ AbilitySystemComponent::~AbilitySystemComponent()
 }
 
 //-----------------------------------------------------------------------------------------------
-void AbilitySystemComponent::SetAttributes( Attributes attributes )
+void AbilitySystemComponent::InitializeAttributes( Attributes const& attributes )
 {
     m_attributeSet->m_attributes = attributes;
 }
