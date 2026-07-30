@@ -145,6 +145,7 @@ struct TextureBinding
 struct RenderConfig
 {
     bool        m_isEnabled = true;
+    bool        m_enablePBR = false;
     std::string m_hdrTexture;
     std::string m_brightPass;
     std::string m_horizontalBlurPass;

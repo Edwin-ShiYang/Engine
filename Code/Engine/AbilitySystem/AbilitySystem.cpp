@@ -15,6 +15,11 @@ AbilitySystem::AbilitySystem( AbilitySystemConfig const& config )
 //-----------------------------------------------------------------------------------------------
 void AbilitySystem::Startup()
 {
+    if ( !m_config.m_isEnabled )
+    {
+        return;
+    }
+
     GUARANTEE_OR_DIE( !m_config.m_abilitySystemComponentDefsFilePath.empty(), Stringf( "AbilitySystemConfig missing AbilitySystemComponent definitions file path" ) );
     AbilitySystemComponentDefinition::InitializeDefinitions( m_config.m_abilitySystemComponentDefsFilePath );
 

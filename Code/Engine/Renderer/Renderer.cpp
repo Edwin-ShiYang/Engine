@@ -114,12 +114,15 @@ void Renderer::Startup()
     InitSamplerModes();
     InitDepthStencilModes();
 
-    m_hdrTexture = CreateOrGetHDRTextureFromFile( m_config.m_hdrTexture.c_str() );
-    ConvertEquirectangularToCubemap( m_hdrTexture );
+    if ( m_config.m_enablePBR )
+    {
+        m_hdrTexture = CreateOrGetHDRTextureFromFile( m_config.m_hdrTexture.c_str() );
+        ConvertEquirectangularToCubemap( m_hdrTexture );
 
-    GenerateIrradianceCubemap();
-    GeneratePrefilteredCubemap();
-    GenerateBRDFLUT();
+        GenerateIrradianceCubemap();
+        GeneratePrefilteredCubemap();
+        GenerateBRDFLUT();
+    }
 
     BindShader( ShaderType::Default );
     BindTexture( nullptr );
@@ -1063,24 +1066,27 @@ void Renderer::CreateDefaultTextures()
 		0,   0, 0,   255,  255, 0, 255,  255, 0,   0,  0,    255,  255, 0, 255, 255
 	};
     // clang-format on
-    g_defaultNormalTexture = CreateTextureFromImage( Image( IntVec2( 4, 4 ), Rgba8( 127, 127, 255, 255 ) ) );
-    g_defaultWhiteTexture  = CreateTextureFromImage( Image( IntVec2( 2, 2 ), Rgba8::WHITE ) );
+    g_defaultNormalTexture  = CreateTextureFromImage( Image( IntVec2( 4, 4 ), Rgba8( 127, 127, 255, 255 ) ) );
+    g_defaultWhiteTexture   = CreateTextureFromImage( Image( IntVec2( 2, 2 ), Rgba8::WHITE ) );
+    g_defaultDiffuseTexture = CreateTextureFromImage( Image( IntVec2( 4, 4 ), defaultDiffuseTextureData, 4 ) );
+    g_defaultSGETexture     = CreateTextureFromImage( Image( IntVec2( 4, 4 ), Rgba8( 127, 127, 0, 255 ) ) );
 
-    g_defaultDiffuseTexture          = CreateTextureFromImage( Image( IntVec2( 4, 4 ), defaultDiffuseTextureData, 4 ) );
-    g_defaultSGETexture              = CreateTextureFromImage( Image( IntVec2( 4, 4 ), Rgba8( 127, 127, 0, 255 ) ) );
-    g_defaultMetallicTexture         = g_defaultWhiteTexture;
-    g_defaultRoughnessTexture        = g_defaultWhiteTexture;
-    g_defaultAmbientOcclusionTexture = g_defaultWhiteTexture;
+    if ( m_config.m_enablePBR )
+    {
+        g_defaultMetallicTexture         = g_defaultWhiteTexture;
+        g_defaultRoughnessTexture        = g_defaultWhiteTexture;
+        g_defaultAmbientOcclusionTexture = g_defaultWhiteTexture;
 
-    m_hdrRenderTexture      = CreateRenderTexture();
-    m_brightPassTexture     = CreateRenderTexture();
-    m_horizontalBlurTexture = CreateRenderTexture();
-    m_verticalBlurTexture   = CreateRenderTexture();
-    m_shadowMapTexture      = CreateDepthTexture();
-    m_environmentTexture    = CreateCubemapTexture( 512, 512, 0, D3D11_RESOURCE_MISC_TEXTURECUBE | D3D11_RESOURCE_MISC_GENERATE_MIPS );
-    m_irradianceTexture     = CreateCubemapTexture( 32, 32, 1, D3D11_RESOURCE_MISC_TEXTURECUBE );
-    m_prefilteredTexture    = CreateCubemapTexture( 128, 128, 5, D3D11_RESOURCE_MISC_TEXTURECUBE );
-    m_brdfLUTTexture        = CreateRenderTexture( 512, 512, DXGI_FORMAT_R16G16_FLOAT );
+        m_hdrRenderTexture      = CreateRenderTexture();
+        m_brightPassTexture     = CreateRenderTexture();
+        m_horizontalBlurTexture = CreateRenderTexture();
+        m_verticalBlurTexture   = CreateRenderTexture();
+        m_shadowMapTexture      = CreateDepthTexture();
+        m_environmentTexture    = CreateCubemapTexture( 512, 512, 0, D3D11_RESOURCE_MISC_TEXTURECUBE | D3D11_RESOURCE_MISC_GENERATE_MIPS );
+        m_irradianceTexture     = CreateCubemapTexture( 32, 32, 1, D3D11_RESOURCE_MISC_TEXTURECUBE );
+        m_prefilteredTexture    = CreateCubemapTexture( 128, 128, 5, D3D11_RESOURCE_MISC_TEXTURECUBE );
+        m_brdfLUTTexture        = CreateRenderTexture( 512, 512, DXGI_FORMAT_R16G16_FLOAT );
+    }
 }
 
 //------------------------------------------------------------------------------------------------
@@ -1172,19 +1178,23 @@ VertexDescriptor Renderer::GetVertexDescriptor( VertexLayoutType vertexType )
 //------------------------------------------------------------------------------------------------
 void Renderer::CreateDefaultShaders()
 {
-    m_defaultShader            = CreateShaderAndComplie( "Data/Shaders/Default", VertexLayoutType::PCUTBN );
-    m_pbrLitStatic             = CreateShaderAndComplie( m_config.m_pbrLitStatic.c_str(), VertexLayoutType::PCUTBN );
-    m_pbrLitSkinned            = CreateShaderAndComplie( m_config.m_pbrLitSkinned.c_str(), VertexLayoutType::Skinned );
-    m_brightPass               = CreateShaderAndComplie( m_config.m_brightPass.c_str(), VertexLayoutType::PCUTBN );
-    m_horizontalBlur           = CreateShaderAndComplie( m_config.m_horizontalBlurPass.c_str(), VertexLayoutType::PCUTBN );
-    m_verticalBlur             = CreateShaderAndComplie( m_config.m_verticalBlurPass.c_str(), VertexLayoutType::PCUTBN );
-    m_toneMapping              = CreateShaderAndComplie( m_config.m_toneMappingPass.c_str(), VertexLayoutType::PCUTBN );
-    m_shadowMap                = CreateShaderAndComplie( m_config.m_shadowMap.c_str(), VertexLayoutType::PCUTBN );
-    m_skybox                   = CreateShaderAndComplie( m_config.m_skybox.c_str(), VertexLayoutType::PCUTBN );
-    m_equirectangularToCubemap = CreateShaderAndComplie( m_config.m_equirectangularToCubemap.c_str(), VertexLayoutType::PCUTBN );
-    m_irradianceConvolution    = CreateShaderAndComplie( m_config.m_irradianceConvolution.c_str(), VertexLayoutType::PCUTBN );
-    m_prefilterEnvironment     = CreateShaderAndComplie( m_config.m_prefilterEnvironment.c_str(), VertexLayoutType::PCUTBN );
-    m_brdfIntegration          = CreateShaderAndComplie( m_config.m_brdfIntegration.c_str(), VertexLayoutType::PCUTBN );
+    m_defaultShader = CreateShaderAndComplie( "Data/Shaders/Default", VertexLayoutType::PCUTBN );
+
+    if ( m_config.m_enablePBR )
+    {
+        m_pbrLitStatic             = CreateShaderAndComplie( m_config.m_pbrLitStatic.c_str(), VertexLayoutType::PCUTBN );
+        m_pbrLitSkinned            = CreateShaderAndComplie( m_config.m_pbrLitSkinned.c_str(), VertexLayoutType::Skinned );
+        m_brightPass               = CreateShaderAndComplie( m_config.m_brightPass.c_str(), VertexLayoutType::PCUTBN );
+        m_horizontalBlur           = CreateShaderAndComplie( m_config.m_horizontalBlurPass.c_str(), VertexLayoutType::PCUTBN );
+        m_verticalBlur             = CreateShaderAndComplie( m_config.m_verticalBlurPass.c_str(), VertexLayoutType::PCUTBN );
+        m_toneMapping              = CreateShaderAndComplie( m_config.m_toneMappingPass.c_str(), VertexLayoutType::PCUTBN );
+        m_shadowMap                = CreateShaderAndComplie( m_config.m_shadowMap.c_str(), VertexLayoutType::PCUTBN );
+        m_skybox                   = CreateShaderAndComplie( m_config.m_skybox.c_str(), VertexLayoutType::PCUTBN );
+        m_equirectangularToCubemap = CreateShaderAndComplie( m_config.m_equirectangularToCubemap.c_str(), VertexLayoutType::PCUTBN );
+        m_irradianceConvolution    = CreateShaderAndComplie( m_config.m_irradianceConvolution.c_str(), VertexLayoutType::PCUTBN );
+        m_prefilterEnvironment     = CreateShaderAndComplie( m_config.m_prefilterEnvironment.c_str(), VertexLayoutType::PCUTBN );
+        m_brdfIntegration          = CreateShaderAndComplie( m_config.m_brdfIntegration.c_str(), VertexLayoutType::PCUTBN );
+    }
 
     BindShader( m_defaultShader );
 }
