@@ -70,7 +70,7 @@ GameplayEffectDurationPolicy GameplayEffectDefinition::ParseDurationPolicy( std:
     if ( durationPolicy == "Infinite" ) return GameplayEffectDurationPolicy::Infinite;
     if ( durationPolicy == "HasDuration" ) return GameplayEffectDurationPolicy::HasDuration;
 
-    ERROR_AND_DIE( Stringf( "Invalid durationPolicy: %s", durationPolicy.c_str() ) );
+    ERROR_AND_DIE( Stringf( "Invalid durationPolicy: %s", durationPolicy.c_str() ) )
 }
 
 //-----------------------------------------------------------------------------------------------

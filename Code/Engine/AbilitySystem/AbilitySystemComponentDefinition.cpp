@@ -1,4 +1,6 @@
 #include "Engine/AbilitySystem/AbilitySystemComponentDefinition.hpp"
+
+#include "GameplayAbilityDefinition.hpp"
 #include "Engine/AbilitySystem/AttributeSetDefinition.hpp"
 #include "Engine/Core/ErrorWarningAssert.hpp"
 
@@ -13,7 +15,7 @@ AbilitySystemComponentDefinition::~AbilitySystemComponentDefinition()
 void AbilitySystemComponentDefinition::LoadFromXmlElement( XmlElement const& element )
 {
     m_name = ParseXmlAttribute( element, "name", m_name );
-    GUARANTEE_OR_DIE( !m_name.empty(), "AbilitySystemComponentDefinition::LoadFromXmlElement - name is missing" );
+    GUARANTEE_OR_DIE( !m_name.empty(), "AbilitySystemComponentDefinition::LoadFromXmlElement - name is missing" )
 }
 
 //-----------------------------------------------------------------------------------------------
@@ -31,8 +33,7 @@ void AbilitySystemComponentDefinition::InitializeDefinitions( std::string const&
     GUARANTEE_OR_DIE( result == XML_SUCCESS, Stringf( "Failed to load AbilitySystemComponentDefinitions: %s", file ) )
 
     XmlElement* rootElement = ascDefsXml.RootElement();
-    GUARANTEE_OR_DIE( rootElement, Stringf( "Root Element is not found!" ) );
-
+    GUARANTEE_OR_DIE( rootElement, Stringf( "Root Element is not found!" ) )
     XmlElement* ascDefElement = rootElement->FirstChildElement();
     while ( ascDefElement )
     {
@@ -42,17 +43,42 @@ void AbilitySystemComponentDefinition::InitializeDefinitions( std::string const&
         AbilitySystemComponentDefinition* ascDef = new AbilitySystemComponentDefinition();
         ascDef->LoadFromXmlElement( *ascDefElement );
 
-        XmlElement const* attributeSetElement = ascDefElement->FirstChildElement( "AttributeSet" );
-        if ( attributeSetElement )
+        if ( XmlElement const* attributeSetElement = ascDefElement->FirstChildElement( "AttributeSet" ) )
         {
             ascDef->m_attributeSetDef = new AttributeSetDefinition();
             ascDef->m_attributeSetDef->LoadFromXmlElement( *attributeSetElement );
+        }
+        
+        if ( XmlElement const* abilitiesElement = ascDefElement->FirstChildElement( "Abilities" ) )
+        {
+            ascDef->LoadAbilitiesFromXml( abilitiesElement->FirstChildElement("Ability" ) );
         }
 
         s_definitions.push_back( ascDef );
         ascDefElement = ascDefElement->NextSiblingElement();
     }
 }
+
+//-----------------------------------------------------------------------------------------------
+void AbilitySystemComponentDefinition::LoadAbilitiesFromXml( XmlElement const* element )
+{
+    while ( element )
+    {
+        std::string abilityElementName = element->Name();
+        GUARANTEE_OR_DIE( abilityElementName == "Ability", Stringf( "Ability is not found" ) )
+        
+        std::string abilitiesName = ParseXmlAttribute( *element, "name", "" );
+        GUARANTEE_OR_DIE( !abilitiesName.empty(), "AbilityName name is not found" )
+        
+        GameplayAbilityDefinition const* abilityDef = GameplayAbilityDefinition::GetDefinitionByName( abilitiesName );
+        GUARANTEE_OR_DIE( abilityDef, "AbilityDef is not Found" )
+        
+        m_abilityDefs.push_back( abilityDef );
+        
+        element = element->NextSiblingElement();
+    }    
+}
+
 
 //-----------------------------------------------------------------------------------------------
 AbilitySystemComponentDefinition const* AbilitySystemComponentDefinition::GetDefinitionByName( std::string const& name )

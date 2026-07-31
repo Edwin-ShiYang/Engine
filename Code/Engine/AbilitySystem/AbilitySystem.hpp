@@ -9,6 +9,7 @@ struct AbilitySystemConfig
     bool        m_isEnabled                          = false;
     std::string m_gameplayEffectDefsFilePath         = "";
     std::string m_abilitySystemComponentDefsFilePath = "";
+    std::string m_gameplayAbilityDefsFilePath        = "";
 };
 
 //-----------------------------------------------------------------------------------------------
