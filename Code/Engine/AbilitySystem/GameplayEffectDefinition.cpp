@@ -86,4 +86,18 @@ char const* GameplayEffectDefinition::GetDurationPolicyString() const
 }
 
 //-----------------------------------------------------------------------------------------------
+GameplayEffectDefinition const* GameplayEffectDefinition::GetDefinitionByName( std::string const& name )
+{
+    for ( int gameplayEffectDefIndex = 0; gameplayEffectDefIndex < static_cast< int >( s_definitions.size() ); ++gameplayEffectDefIndex )
+    {
+        GameplayEffectDefinition* gameplayEffectDef = s_definitions[ gameplayEffectDefIndex ];
+        if ( gameplayEffectDef->m_name == name )
+        {
+            return gameplayEffectDef;
+        }
+    }
+    return nullptr;
+}
+
+//-----------------------------------------------------------------------------------------------
 std::vector< GameplayEffectDefinition* > GameplayEffectDefinition::s_definitions;

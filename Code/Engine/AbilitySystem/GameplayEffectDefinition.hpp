@@ -24,12 +24,12 @@ public:
     GameplayEffectDefinition()  = default;
     ~GameplayEffectDefinition() = default;
 
-    void                         LoadFromXmlElement( XmlElement const& element );
-    GameplayEffectDurationPolicy ParseDurationPolicy( std::string durationPolicy );
-    char const*                  GetDurationPolicyString() const;
+    void                                            LoadFromXmlElement( XmlElement const& element );
+    GameplayEffectDurationPolicy                    ParseDurationPolicy( std::string durationPolicy );
+    char const*                                     GetDurationPolicyString() const;
 
-    static void
-                                                    InitializeDefinitions( std::string const& definitionFilePath );
+    static GameplayEffectDefinition const*          GetDefinitionByName( std::string const& name );
+    static void                                     InitializeDefinitions( std::string const& definitionFilePath );
     static void                                     ClearDefinitions();
     static std::vector< GameplayEffectDefinition* > s_definitions;
 

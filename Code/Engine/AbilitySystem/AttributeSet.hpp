@@ -23,11 +23,16 @@ public:
     AttributeSet()          = default;
     virtual ~AttributeSet() = default;
 
-    bool       HasAttribute( std::string const& name ) const;
-    void       SetAttribute( std::string const& name, float value );
+    void                        SetAttributeBaseValue( std::string const& name, float value );
+    inline AttributeData const& GetAttribute( std::string const& name ) const
+    {
+        return m_attributes.at( name );
+    };
 
-    float      GetAttribute( std::string const& name ) const;
-    Attributes GetAttributes() const;
+    inline Attributes const& GetAttributes() const
+    {
+        return m_attributes;
+    };
 
 protected:
     Attributes m_attributes;

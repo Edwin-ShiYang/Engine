@@ -7,7 +7,7 @@
 #include "Engine/Math/OBB2.hpp"
 #include "Engine/Math/OBB3.hpp"
 #include "Engine/Math/RaycastUtils.hpp"
-#include "Plane3.hpp"
+#include "Engine/Math/Plane3.hpp"
 
 //-----------------------------------------------------------------------------------------------
 struct Vec2;
@@ -31,20 +31,43 @@ enum class BillboardType
 constexpr float PI = 3.14159265f;
 
 //-----------------------------------------------------------------------------------------------
-int             GetMaxInt( int a, int b );
-float           GetMinFloat( float a, float b );
+namespace Math
+{
+    template < typename T >
+    T Min( T const& a, T const& b )
+    {
+        return a < b ? a : b;
+    }
 
-float           GetClamped( float value, float minValue, float maxValue );
-double          GetClamped( double value, double minValue, double maxValue );
-int             GetClamped( int value, int minValue, int maxValue );
+    template < typename T >
+    T Max( T const& a, T const& b )
+    {
+        return a > b ? a : b;
+    }
+}
 
+//-----------------------------------------------------------------------------------------------
+template < typename T >
+T GetClamped( T const& value, T const& minValue, T const& maxValue )
+{
+    if ( value < minValue ) return minValue;
+    if ( value > maxValue ) return maxValue;
+    return value;
+}
+
+//-----------------------------------------------------------------------------------------------
+template < typename T >
+T GetFractionWithinRange( T value, T rangeStart, T rangeEnd )
+{
+    if ( rangeStart == rangeEnd ) return 0.5f;
+    return ( value - rangeStart ) / ( rangeEnd - rangeStart );
+}
+
+//-----------------------------------------------------------------------------------------------
 float           GetClampedZeroToOne( float value );
 float           Interpolate( float start, float end, float fractionTowardEnd );
 Vec3            Interpolate( Vec3 const& start, Vec3 const& end, float fractionTowardEnd );
 Vec4            Interpolate( Vec4 const& start, Vec4 const& end, float fractionTowardEnd );
-
-float           GetFractionWithinRange( float value, float rangeStart, float rangeEnd );
-double          GetFractionWithinRange( double value, double rangeStart, double rangeEnd );
 
 float           RangeMap( float inValue, float inStart, float inEnd, float outStart, float outEnd );
 float           RangeMapClamped( float inValue, float inStart, float inEnd, float outStart, float outEnd );

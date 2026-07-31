@@ -1,7 +1,8 @@
 #pragma once
 
 //-----------------------------------------------------------------------------------------------
-#include <string>
+class AbilitySystemComponent;
+class GameplayEffectDefinition;
 
 //-----------------------------------------------------------------------------------------------
 class GameplayEffect
@@ -11,4 +12,7 @@ public:
     ~GameplayEffect() = default;
 
 public:
+    AbilitySystemComponent*         m_sourceASC         = nullptr;
+    AbilitySystemComponent*         m_targetASC         = nullptr;
+    GameplayEffectDefinition const* m_gameplayEffectDef = nullptr;
 };

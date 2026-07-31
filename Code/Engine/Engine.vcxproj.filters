@@ -227,6 +227,9 @@
     <Filter Include="Core\ParticleSystem">
       <UniqueIdentifier>{6d986f5f-f8af-4ad9-97ac-6bb917c73ff9}</UniqueIdentifier>
     </Filter>
+    <Filter Include="Core\AbilitySystem\AbilitySystemUtils">
+      <UniqueIdentifier>{1eb0374b-47b1-4b9c-8da9-27cb6c989e30}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Renderer\Renderer.cpp">
@@ -489,6 +492,9 @@
     </ClCompile>
     <ClCompile Include="ParticleSystem\ParticleEmitter.cpp">
       <Filter>Core\ParticleSystem</Filter>
+    </ClCompile>
+    <ClCompile Include="AbilitySystem\AbilitySystemUtils.cpp">
+      <Filter>Core\AbilitySystem\AbilitySystemUtils</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -773,6 +779,9 @@
     </ClInclude>
     <ClInclude Include="Renderer\RenderConstants.hpp">
       <Filter>Renderer</Filter>
+    </ClInclude>
+    <ClInclude Include="AbilitySystem\AbilitySystemUtils.hpp">
+      <Filter>Core\AbilitySystem\AbilitySystemUtils</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

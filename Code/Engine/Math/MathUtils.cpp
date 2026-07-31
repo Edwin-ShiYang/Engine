@@ -109,28 +109,6 @@ Vec4 Interpolate( Vec4 const& start, Vec4 const& end, float fractionTowardEnd )
 }
 
 //-----------------------------------------------------------------------------------------------
-float GetFractionWithinRange( float value, float rangeStart, float rangeEnd )
-{
-    if ( rangeStart == rangeEnd )
-    {
-        return 0.5f;
-    }
-
-    return ( value - rangeStart ) / ( rangeEnd - rangeStart );
-}
-
-//-----------------------------------------------------------------------------------------------
-double GetFractionWithinRange( double value, double rangeStart, double rangeEnd )
-{
-    if ( rangeStart == rangeEnd )
-    {
-        return 0.5f;
-    }
-
-    return ( value - rangeStart ) / ( rangeEnd - rangeStart );
-}
-
-//-----------------------------------------------------------------------------------------------
 float RangeMap( float inValue, float inStart, float inEnd, float outStart, float outEnd )
 {
     float fraction = GetFractionWithinRange( inValue, inStart, inEnd );
